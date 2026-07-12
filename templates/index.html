@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Header-->
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<script>
+  // Runs synchronously before page paints, prevents flash
+  var __tab = localStorage.getItem('activeTab') || '#tab_1';
+  document.write('<style>[data-tab-info]{display:none!important}.active[data-tab-info]{display:block!important}</style>');
+</script>
+
+
+<link href="https://fonts.googleapis.com/css?family=Work+Sans:900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@700&family=Source+Sans+Pro:wght@400&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body class="loading">
+  <header>&#9917<span class="glitter"> A GIRLS GUIDE TO FOOTBALL </span>&#9917</header>
+  <!-- Body Container -->
+  <div class="container">
+
+    <!-- Tabs Detail -->
+    <div class="tabs">
+      <span data-tab-value="#tab_1">Home</span>
+      <span data-tab-value="#tab_2">Positions</span>
+      <span data-tab-value="#tab_3">Rules</span>
+      <span data-tab-value="#tab_4">Leagues</span>
+      <span data-tab-value="#tab_5">Players</span>
+      <span data-tab-value="#tab_6">Quiz</span>
+      <span data-tab-value="#tab_7">⚽ Footy</span>
+      <span class="tab-login" onclick="document.getElementById('loginModal').style.display='flex'">&#128100; Login</span>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+      <div style="background:#fff; border-radius:12px; padding:2rem; width:340px; box-shadow:0 8px 32px rgba(235,23,143,0.2); font-family:'Lora',serif; position:relative;">
+        
+        <!-- Close button -->
+        <span onclick="document.getElementById('loginModal').style.display='none'" 
+          style="position:absolute; top:12px; right:16px; font-size:20px; cursor:pointer; color:#aaa;">&times;</span>
+
+        <!-- Header -->
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <div style="font-size:2rem;">&#9917;</div>
+          <h2 style="color:#EB178F; margin:0.3rem 0; font-family:'Playfair Display',serif;">Welcome Back!</h2>
+          <p style="color:#999; font-size:13px; font-family:'Source Sans Pro',sans-serif; margin:0;">Sign in to save your quiz scores</p>
+        </div>
+
+        <!-- Form -->
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Username or Email</label>
+          <input type="text" placeholder="Enter your username..." 
+            style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Password</label>
+          <input type="password" placeholder="Enter your password..." 
+            style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+        </div>
+
+        <!-- Login button -->
+        <button style="width:100%; padding:12px; background:#EB178F; color:white; border:none; border-radius:8px; font-size:15px; font-family:'Lora',serif; font-weight:bold; cursor:pointer; letter-spacing:0.5px;">
+          Login &#9917;
+        </button>
+
+        <!-- Divider -->
+        <div style="text-align:center; margin:1rem 0; color:#ccc; font-size:12px;">― or ―</div>
+
+        <!-- Register link -->
+        <button style="width:100%; padding:11px; background:#fff; color:#EB178F; border:2px solid #EB178F; border-radius:8px; font-size:14px; font-family:'Lora',serif; cursor:pointer;">
+          Create an Account
+        </button>
+
+        <p style="text-align:center; font-size:11px; color:#bbb; margin-top:1rem; font-family:'Source Sans Pro',sans-serif;">
+          Logged-in users can save scores &amp; view the leaderboard
+        </p>
+      </div>
+    </div>
+
+
+
+    <!-- Tab content -->
+    <div class="tab-content">
+
+      <!-- Home -->
+      <div class="tabs__tab active" id="tab_1" data-tab-info>
+        <main>
+          <h1>This website is designed to empower girls who are passionate to learn more about football.</h1>
+          <p style="text-align:center">
+            I will cover the basic rules and terminology to advanced tactics and formations, 
+            you’ll find easy to understand explanations that cater to both beginners 
+            and seasoned fans. I’ll dive into key aspects like player positions,
+            major competitions, iconic clubs, and legendary players, while also exploring 
+            fan culture, rivalries, and football traditions from around the world. You’ll 
+            learn about the history of the game, how transfers and scouting work, and even 
+            tips on how to get involved in playing or supporting football. Whether you’re 
+            curious about the Premier League, the FIFA World Cup, or just want to understand
+            what makes football so special, this site is your go-to resource for everything 
+            related to the beautiful game.
+          </p>
+          <h2> Introduction To Football</h2>
+          <p style="text-align:center">Football, known as soccer in some countries, is the world’s most popular sport, played and loved by millions across every continent. 
+            It is a simple yet exciting game played between two teams of 11 players each. 
+            The primary objective is to score more goals than the opposing team by getting the ball 
+            into their goal, primarily using their feet, heads, or bodies - except the goalkeeper, 
+            who can use their hands within the penalty area. The match is played on a rectangular field with a goal at each end, and 
+            the game lasts for 90 minutes, divided into two 45-minute halves. In the event of a tie, 
+            extra time or a penalty shootout may be used, depending on the competition.
+          <p>
+          <h3>Why learn about football?</h3>
+          <p style="text-align:center">
+            Understanding football allows you to appreciate the strategy, skills, and teamwork involved, 
+            transforming the way you watch and enjoy matches. It deepens your connection to the sport, 
+            enabling you to follow tactics, player movements, and key moments with a more analytical 
+            perspective. Whether you're playing casually with friends or pursuing it competitively, 
+            football is an excellent way to stay active and become part of a global 
+            community. 
+            The sport’s global appeal is undeniable, with massive tournaments like the FIFA 
+            (Fédération Internationale de Football Association) World Cup uniting billions of fans. 
+            It’s not just a game; it’s a universal language, a cultural phenomenon, and a source of 
+            unending passion and excitement.
+          </p>
+        </main>
+          
+      </div>
+
+      <!-- Positions -->
+      <div class="tabs__tab" id="tab_2" data-tab-info>
+      <main>
+        <h1>Positions</h1>
+         <p>In football, each player has a specific role or position on the field, and these positions can vary depending on the team's formation and strategy. Below is an outline of the main positions in soccer, categorised by their general areas of responsibility.
+          </p>
+            <h4>Click on a player position to see details</h4>
+          
+            <div id="field">
+              <img src="{{ url_for('static', filename='images/footballField.png') }}" alt="Football Field" width="610" height= "315">
+              <div class="info-popup" id="infoPopup"></div>
+            </div>
+
+  
+    <p>Typical UK Football Formations:</p>
+    <p>The number of players in each role depends on the team’s formation, such as</p> 
+    <ul>
+      <li>4-4-2: 4 defenders, 4 midfielders, 2 forwards (a classic British formation).</li>
+      <li>4-3-3: 4 defenders, 3 midfielders, 3 forwards (used by many modern teams, originated in Netherlands).</li>
+      <li>3-5-2: 3 centre-backs, 2 wing-backs, 3 midfielders, 2 forwards (popular for counter-attacking).</li>
+      <li>4-2-3-1: 4 defenders, 2 defensive midfielders, 3 attacking midfielders and 1 striker (popular for teams that dominate).</li>
+    </ul>  
+
+    <!-- Formation Quiz Question -->
+      <div style="margin: 1.5rem auto; max-width: 600px; text-align:center;">
+        <h3 style="font-family:'Playfair Display',serif; color:#EB178F; text-decoration:none;">
+          ⚽ What formation is shown in the diagram above?
+        </h3>
+        
+        <div id="formation-result" style="font-size:16px; font-weight:bold; margin-bottom:10px; min-height:24px;"></div>
+
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">         
+          <button class="formation-btn" onclick="checkFormation(this, false)">4-4-2</button>
+          <button class="formation-btn" onclick="checkFormation(this, false)">4-3-3</button>
+          <button class="formation-btn" onclick="checkFormation(this, false)">3-5-2</button>
+          <button class="formation-btn" onclick="checkFormation(this, true)">4-2-3-1</button>
+        </div>
+
+      </div>
+
+      </main>
+      </div>
+
+
+      <!-- Rules -->
+      <div class="tabs__tab" id="tab_3" data-tab-info>
+        <main>
+          <h1> Rules </h1>
+          <h3>Basics Of The Game</h3>
+          <p>Key rules of football include:</p>
+          <ul>
+            <li>Offside: A player is offside if they are nearer to the opponent's goal line than both the ball and the second-last defender (with the last defender being the goalkeeper) when the ball is passed to them.</li>  
+            <li>Fouls: Actions such as tripping, pushing, or handling the ball (except the goalkeeper in their area) are considered fouls and can result in free kicks or penalties.</li>  
+            <li>Free Kicks and Penalties: A free kick is awarded for a foul, while a penalty kick is given when a foul occurs inside the penalty box.</li>  
+            <li>Yellow Card: Players can be cautioned with a yellow card for unsporting behavior.</li>
+            <li>Red Card: A red card is issued for serious fouls or misconduct, resulting in the player’s expulsion from the game.</li>
+            <li>The goalkeeper is the only player allowed to use their hands and arms, but only within the penalty area.</li>
+            <li>The opposition must not enter the centre circle until after the kick-off (start of the game).</li>
+          </ul>
+          
+          <p>
+            The game is played with the ball primarily using feet, but players can also use their heads or chests to control or pass the ball. The team with the most goals at the end of the game wins!
+          </p>
+
+        </main>
+      </div>
+
+      <div class="tabs__tab" id="tab_4" data-tab-info>
+        <main>
+          <h1>Leagues</h1>
+          <h6>English Premier League (EPL)</h6>
+          <ul>
+            <li><span class="label">Country:</span> &nbsp; England</li> 
+            <li><span class="label">Description:</span> &nbsp; The EPL is one of the most competitive and widely watched football leagues in the world. It consists of 20 clubs, including iconic teams like Manchester United, Liverpool, Arsenal, and Chelsea. Known for its intense competition, high-speed gameplay, and unpredictable outcomes, the EPL attracts millions of fans globally.</li>
+            <li><span class="label">Season:</span> &nbsp; Runs from August to May.</li>
+            <li><span class="label">Format:</span> &nbsp; Each team plays 38 matches (home and away), and the team with the most points wins the title. The bottom three teams are relegated to the EFL Championship.</li>
+          </ul>
+          <h6>La Liga</h6>
+          <ul>
+            <li><span class="label">Country:</span> &nbsp; Spain</li> 
+            <li><span class="label">Description:</span> &nbsp; Spain's top football league, La Liga, is renowned for its technical and skillful gameplay. It features legendary clubs like Real Madrid and FC Barcelona, which are home to some of the world’s best players.</li>
+            <li><span class="label">Season:</span> &nbsp; Runs from August to May.</li>
+            <li><span class="label">Format:</span> &nbsp; 20 teams compete, with the top four qualifying for the UEFA Champions League and the bottom three relegated to Segunda División.</li>
+          </ul>
+          <h6>Serie A</h6>
+          <ul>
+            <li><span class="label">Country:</span> &nbsp; Italy</li> 
+            <li><span class="label">Description:</span> &nbsp; Serie A is known for its strong emphasis on tactics and defense. Italian clubs like Juventus, AC Milan, and Inter Milan have a rich history in European football.</li>
+            <li><span class="label">Season:</span> &nbsp; Runs from August to May.</li>
+            <li><span class="label">Format:</span> &nbsp; 20 teams compete in a round-robin format. The league champions are awarded the famous Scudetto badge.</li>
+          </ul>
+          <h6>Bundesliga</h6>
+          <ul>
+            <li><span class="label">Country:</span> &nbsp; Germany</li> 
+            <li><span class="label">Description:</span> &nbsp; The Bundesliga is famous for its attacking football, passionate fan culture, and high-scoring games. Bayern Munich has dominated the league in recent years, but other clubs like Borussia Dortmund and RB Leipzig are strong competitors.</li>
+            <li><span class="label">Season:</span> &nbsp; Runs from August to May.</li>
+            <li><span class="label">Format:</span> &nbsp; 18 teams play 34 matches. The league winner qualifies directly for the Champions League, while the bottom two teams are relegated.</li>
+          </ul>
+          <h6>Ligue 1</h6>
+          <ul>
+            <li><span class="label">Country:</span> &nbsp; France</li> 
+            <li><span class="label">Description:</span> &nbsp; Ligue 1 is known for producing young talents who often go on to play in bigger European leagues. Paris Saint-Germain (PSG) has dominated the league recently, featuring world-class players like Kylian Mbappé and Neymar.</li>
+            <li><span class="label">Season:</span> &nbsp; Runs from August to May.</li>
+            <li><span class="label">Format:</span> &nbsp; 18 teams compete, and the bottom two are relegated.</li>
+          </ul>
+          <h6>Major League Soccer (MLS)</h6>
+          <ul>
+            <li><span class="label">Country:</span> &nbsp; United States & Canada</li> 
+            <li><span class="label">Description:</span> &nbsp; MLS is the top professional league in North America and has grown rapidly in popularity over the years. It features a mix of homegrown talent and international stars.</li>
+            <li><span class="label">Season:</span> &nbsp; Runs February to November.</li>
+            <li><span class="label">Format:</span> &nbsp; Divided into Eastern and Western conferences, with playoffs determining the MLS Cup champion.</li>
+          </ul>
+          <h6>UEFA Champions League (UCL)</h6>
+          <ul>
+            <li><span class="label">Region:</span> &nbsp; Europe (International)</li> 
+            <li><span class="label">Description:</span> &nbsp; The UCL is the most prestigious club competition in European football, featuring the best teams from various leagues like the Premier League, La Liga, Serie A, and Bundesliga. Teams compete in a group stage followed by knockout rounds, with the winner crowned the best club in Europe.</li>
+            <li><span class="label">Season:</span> &nbsp; Runs from September to May.</li>
+            <li><span class="label">Format:</span> &nbsp; The final is one of the most-watched sporting events globally.</li>
+          </ul>
+          <h6>FIFA World Cup</h6>
+          <ul>
+            <li><span class="label">Region:</span> &nbsp; Global</li> 
+            <li><span class="label">Description:</span> &nbsp; Although not a league, the World Cup is the pinnacle of international football. Held every four years, it brings together national teams from all over the world to compete for the prestigious trophy.</li>
+            <li><span class="label">Format:</span> &nbsp; A group stage followed by knockout rounds, with 32 teams competing (expanding to 48 teams from 2026).</li>
+          </ul>
+          <h6>Other Notable Leagues</h6>
+          <ul>
+            <li><span class="label">Eredivisie (Netherlands):</span> &nbsp; Known for its focus on youth development and attacking play.</li> 
+            <li><span class="label">Primeira Liga (Portugal):</span> &nbsp; Home to powerhouse clubs like Benfica, Porto, and Sporting CP.</li>
+            <li><span class="label">J-League (Japan):</span> &nbsp; The top league in Asia, known for its disciplined and exciting play.</li>
+            <li><span class="label">Saudi Pro League (Saudi Arabia):</span> &nbsp; Growing rapidly with the influx of global stars.</li>
+          </ul>
+        </main>
+      </div>
+
+
+
+      <div class="tabs__tab" id="tab_5" data-tab-info>
+      <main>
+        <h1>Players</h1>
+          
+      </main>
+      </div>
+
+
+  
+<!-- Quiz -->
+<div class="tabs__tab" id="tab_6" data-tab-info>
+  <main>
+    <h1>Quiz</h1>
+    <!-- Quiz Container -->
+    <div class="quiz-container">
+      <!-- Display remaining questions -->
+      <div id="remaining-questions" class="remaining-questions"></div>
+
+      <div id="quiz"></div>
+      <div id="result" class="result"></div>
+    </div>
+  </main>
+</div>
+      
+
+<!-- Footy AI Chatbot Tab -->
+<div class="tabs__tab" id="tab_7" data-tab-info>
+  <main>
+    <h1>⚽ Ask Footy</h1>
+    <p style="text-align:center; color:#888; font-family:'Source Sans Pro',sans-serif; font-size:14px; margin-top:0;">
+      Your AI football guide — ask me anything about the beautiful game!
+    </p>
+
+    <div id="footy-chat-window" style="
+      border: 1px solid #f0b8d8;
+      border-radius: 12px;
+      padding: 1rem;
+      height: 380px;
+      overflow-y: auto;
+      background: #fff9fc;
+      margin: 0 auto 1rem auto;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    ">
+      <div class="footy-msg footy-msg--bot">
+        <span class="footy-avatar">⚽</span>
+        <div class="footy-bubble footy-bubble--bot">
+          Hi! I'm Footy, your football guide 🎉 Ask me about rules, positions, leagues, players, tactics — anything football!
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:8px; max-width:680px; margin:0 auto;">
+      <input
+        id="footy-input"
+        type="text"
+        placeholder="Ask Footy a football question..."
+        onkeydown="if(event.key==='Enter') sendFootyMessage()"
+        style="
+          flex:1;
+          padding:11px 14px;
+          border:1px solid #f0b8d8;
+          border-radius:8px;
+          font-size:14px;
+          font-family:'Source Sans Pro',sans-serif;
+          outline:none;
+        "
+      >
+      <button
+        onclick="sendFootyMessage()"
+        style="
+          padding:11px 22px;
+          background:#EB178F;
+          color:white;
+          border:none;
+          border-radius:8px;
+          font-size:14px;
+          font-family:'Lora',serif;
+          font-weight:bold;
+          cursor:pointer;
+        "
+      >Send ⚽</button>
+    </div>
+
+    <p style="text-align:center; font-size:11px; color:#ccc; margin-top:10px; font-family:'Source Sans Pro',sans-serif;">
+      Footy only answers football questions. Powered by Groq AI.
+    </p>
+  </main>
+</div>
+    </div>
+  </div>
+  
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/footy.js') }}"></script>
+</body>
+
+<footer>
+  <hr>
+   <h5>Author: Uxanaa Shashitharen</h5>
+   <h5>Inspired by Charley Rigg ⚽</h5>
+  <hr>
+</footer>
+
+
+</html>

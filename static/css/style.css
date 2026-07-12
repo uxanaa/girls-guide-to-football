@@ -1,0 +1,249 @@
+body {
+  background-color: #f5e6ee;
+}
+
+/* Title */
+header {
+	text-align: center;
+	font-family: 'Work Sans', sans-serif;
+	font-size: 50px;
+}
+
+.glitter {
+	background: url("https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHFlMXQ1ZGxrbTdoZzJ4bWhsNm4xaHg2ejllbXV6a25uZ3VybG10dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KH4QT4rqnnka04884l/giphy.webp");
+   -webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.container {
+  border: 1px solid grey;
+  margin: 1rem;
+}
+
+
+h1{
+	text-align: center;
+	font-size: 30px;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+h2{
+	text-align: center;
+	font-size: 20px;
+  font-family: 'Playfair Display', serif;
+  text-decoration: underline;
+}
+
+h3{
+  font-size: 15px;
+  text-decoration: underline;
+  font-family: 'Lora', serif;
+}
+
+h4{
+  font-size: 15px;
+  font-family: 'Lora', serif;
+}
+
+h5{
+  font-size: 12px;
+  color: rgb(239, 155, 202);
+  text-align: center;
+  height: auto;
+  font-family: 'Lora', serif;
+}
+
+h6{
+  font-size: 18px;
+  font-family: 'Lora', serif;
+}
+
+.label {
+  font-size: 17px;
+  font-weight: bold;
+  font-family: 'Lora', serif;
+}
+
+p{
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px; 
+}
+
+
+li {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15px;      /* Adjust this value so that it appears what size you want. */
+}
+
+
+/* Tabs */
+[data-tab-info] {
+  display: none;
+}
+
+.active[data-tab-info] {
+  display: block;
+}
+.tab-content {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: bold;
+  color: rgb(235, 23, 143);
+}
+.tabs {
+  border-bottom: 1px solid grey;
+  background-color: rgb(235, 23, 143);
+  font-size: 25px;
+  color: white;
+  display: flex;
+  margin: 0;
+}
+.tabs span {
+  background: rgb(235, 23, 143);
+  padding: 10px;
+  border: 1px solid rgb(255, 255, 255);
+}
+.tabs span:hover {
+  background: rgb(235, 23, 143);
+  cursor: pointer;
+  color: pink;
+}
+
+/*footballField image*/
+  #field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    background-color: #f5e6ee;
+  }
+  #field img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  #infoPopup {
+    position: absolute;
+    display: none;
+    background: #ffffffe6;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    font-family: 'Lora', serif;
+  }
+
+
+/* Quiz */
+.answer {
+  display: block;
+  width: 100%; /* Make all answers take full width of their container */
+  max-width: 400px; /* Set a maximum width for consistency */
+  margin: 10px auto;
+  padding: 15px; /* Increase padding for better appearance */
+  border: none;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center; /* Center-align the text inside the buttons */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  transition: background-color 0.3s;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.answer:hover {
+  background-color: #ddd;
+}
+
+.correct {
+  background-color: #4CAF50 !important; /* Green */
+  color: white;
+}
+
+.wrong {
+  background-color: #f44336 !important; /* Red */
+  color: white;
+}
+
+.answer:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Login tab button */
+.tab-login {
+  margin-left: auto;
+  background: white !important;
+  color: #EB178F !important;
+  font-weight: bold;
+  border: none !important;
+  border-radius: 4px 4px 0 0;
+}
+.tab-login:hover {
+  background: #fce8f3 !important;
+  color: #EB178F !important;
+  cursor: pointer;
+}
+
+/* Footy Chatbot */
+.footy-msg { display:flex; align-items:flex-end; gap:8px; }
+.footy-msg--user { flex-direction:row-reverse; }
+.footy-avatar { font-size:20px; flex-shrink:0; margin-bottom:2px; }
+.footy-bubble { max-width:75%; padding:10px 14px; border-radius:16px; font-size:14px; font-family:'Source Sans Pro',sans-serif; line-height:1.5; }
+.footy-bubble--bot { background:#fce8f3; color:#333; border-bottom-left-radius:4px; }
+.footy-bubble--user { background:#EB178F; color:white; border-bottom-right-radius:4px; }
+.footy-typing { display:flex; align-items:center; gap:5px; padding:12px 16px; }
+.footy-typing span { width:7px; height:7px; background:#EB178F; border-radius:50%; display:inline-block; animation:footyDot 1.2s infinite ease-in-out; }
+.footy-typing span:nth-child(2) { animation-delay:0.2s; }
+.footy-typing span:nth-child(3) { animation-delay:0.4s; }
+@keyframes footyDot { 0%,80%,100%{transform:scale(0.7);opacity:0.5} 40%{transform:scale(1);opacity:1} }
+
+
+
+/* Formation Question */
+.formation-btn {
+  padding: 12px 24px;
+  font-size: 15px;
+  font-family: 'Lora', serif;
+  font-weight: bold;
+  border: 2px solid #EB178F;
+  border-radius: 8px;
+  background: white;
+  color: #EB178F;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+.formation-btn:hover {
+  background: #fce8f3;
+}
+.formation-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+.formation-btn.correct {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  border-color: #4CAF50 !important;
+}
+.formation-btn.wrong {
+  background-color: #f44336 !important;
+  color: white !important;
+  border-color: #f44336 !important;
+}
+
+[data-tab-info] {
+  display: none;
+}
+.active[data-tab-info] {
+  display: block;
+}

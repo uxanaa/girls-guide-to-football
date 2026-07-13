@@ -181,67 +181,107 @@ function loadQuiz() {
 
 // Handle Answer Selection
 function selectAnswer(index) {
-  selectedAnswer = index; // Track the selected answer
-
+  selectedAnswer = index;
   const answerButtons = document.querySelectorAll(".answer");
+
+  // Highlight correct and wrong, disable all
   answerButtons.forEach((btn, i) => {
-    btn.disabled = true; // Disable all buttons after an answer is selected
+    btn.disabled = true;
     if (i === index && index !== quizQuestions[currentQuiz].correct) {
-      // Wrong answer selected
       btn.classList.add("wrong");
-      // Store the wrong answer with the correct answer for later display
-      wrongAnswers.push({
-        question: quizQuestions[currentQuiz].question,
-        selected: quizQuestions[currentQuiz].options[index],
-        correct: quizQuestions[currentQuiz].options[quizQuestions[currentQuiz].correct]
-      });
     }
     if (i === quizQuestions[currentQuiz].correct) {
-      // Highlight the correct answer
       btn.classList.add("correct");
     }
   });
 
-  // Show result
+  // Show correct/wrong message
   if (index === quizQuestions[currentQuiz].correct) {
-    resultContainer.textContent = "Correct!";
-    resultContainer.style.color = "#4CAF50"; // Green text for correct
-    correctAnswers++; // Increment correct answers count
+    resultContainer.textContent = "✅ Correct!";
+    resultContainer.style.color = "#4CAF50";
+    correctAnswers++;
   } else {
-    resultContainer.textContent = "Wrong!";
-    resultContainer.style.color = "#f44336"; // Red text for wrong
+    resultContainer.textContent = "❌ Wrong!";
+    resultContainer.style.color = "#f44336";
   }
 
-  // Prepare for the next question or end quiz
+  // Move to next question
   currentQuiz++;
+
+  // Show Next button or Finish button
   if (currentQuiz < quizQuestions.length) {
-    setTimeout(() => {
-      selectedAnswer = null; // Reset selected answer
-      loadQuiz(); // Load the next question
-    }, 2000); // 2-second delay
+    resultContainer.innerHTML += `
+      <br><button onclick="loadQuiz()" style="
+        margin-top:10px;
+        padding:10px 24px;
+        background:#EB178F;
+        color:white;
+        border:none;
+        border-radius:8px;
+        font-size:14px;
+        font-family:'Lora',serif;
+        font-weight:bold;
+        cursor:pointer;
+      ">Next Question ➡️</button>`;
   } else {
-    showResults(); // Show the final results
+    resultContainer.innerHTML += `
+      <br><button onclick="showResults()" style="
+        margin-top:10px;
+        padding:10px 24px;
+        background:#EB178F;
+        color:white;
+        border:none;
+        border-radius:8px;
+        font-size:14px;
+        font-family:'Lora',serif;
+        font-weight:bold;
+        cursor:pointer;
+      ">See Results 🏆</button>`;
   }
 }
 
 // Display results at the end of the quiz
 function showResults() {
-  resultContainer.innerHTML = `<h3>Your Score: ${correctAnswers} / ${quizQuestions.length}</h3>`;
+  quizContainer.innerHTML = '';
+  remainingQuestionsContainer.innerHTML = '';
+  resultContainer.innerHTML = `
+    <h3>Your Score: ${correctAnswers} / ${quizQuestions.length}</h3>
+    <p style="color:#888; font-family:'Source Sans Pro',sans-serif;">
+      ${correctAnswers === quizQuestions.length 
+        ? '🎉 Perfect score! You know your football!' 
+        : correctAnswers >= 7 
+        ? '⚽ Great effort! Keep learning!' 
+        : 'Keep practising — you\'ll get there!'}
+    </p>
+    <button onclick="restartQuiz()" style="
+      margin-top:10px;
+      padding:10px 24px;
+      background:#EB178F;
+      color:white;
+      border:none;
+      border-radius:8px;
+      font-size:14px;
+      font-family:'Lora',serif;
+      font-weight:bold;
+      cursor:pointer;
+    ">Play Again ⚽</button>
+  `;
 
-  if (wrongAnswers.length > 0) {
-    resultContainer.innerHTML += "<h3>Incorrect Answers:</h3>";
-   
-    wrongAnswers.forEach(item => {
-      resultContainer.innerHTML += `
-        <p><strong>Question:</strong> ${item.question}</p>
-        <p><strong>Your answer:</strong> ${item.selected}</p>
-        <p><strong>Correct answer:</strong> ${item.correct}</p>
-        <br>
-      `;
-    });
-  } else {
-    resultContainer.innerHTML += "<p>Congratulations! You answered all questions correctly.</p>";
-  }
+  // Save score to Flask if logged in
+  fetch('/save_score', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ score: correctAnswers, total: quizQuestions.length })
+  }).catch(() => {});
+}
+
+function restartQuiz() {
+  currentQuiz = 0;
+  correctAnswers = 0;
+  wrongAnswers = [];
+  selectedAnswer = null;
+  quizQuestions = getRandomQuestions();
+  loadQuiz();
 }
 
 // Initialize Quiz

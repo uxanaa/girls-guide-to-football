@@ -251,7 +251,7 @@ function showResults() {
         ? '🎉 Perfect score! You know your football!' 
         : correctAnswers >= 7 
         ? '⚽ Great effort! Keep learning!' 
-        : 'Keep practising — you\'ll get there!'}
+        : 'Keep practising!'}
     </p>
     <button onclick="restartQuiz()" style="
       margin-top:10px;

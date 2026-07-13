@@ -175,6 +175,8 @@ li {
 
 .result {
   margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
   font-size: 18px;
   font-weight: bold;
   text-align: center;

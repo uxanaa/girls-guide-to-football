@@ -8,8 +8,17 @@ import os
 import urllib.request
 import json
 
+# Security headers
+@app.after_request
+def set_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
+
 app = Flask(__name__)
-app.secret_key = 'footy_secret_key_change_this_later'
+app.secret_key = os.getenv('SECRET_KEY', 'fallback-dev-key')
+app.config['BCRYPT_LOG_ROUNDS'] = 12
 
 # User sessions expire after 30 minutes of inactivity
 app.permanent_session_lifetime = timedelta(minutes=30)
@@ -144,6 +153,28 @@ def my_scores():
     ).fetchall()
     conn.close()
     return jsonify({'scores': [dict(s) for s in scores]})
+
+@app.route('/save_score', methods=['POST'])
+@login_required
+def save_score():
+    data = request.get_json()
+    score = data.get('score')
+    total = data.get('total')
+    
+    # Server-side validation — reject impossible scores
+    if not isinstance(score, int) or not isinstance(total, int):
+        return jsonify({'success': False, 'message': 'Invalid score data.'}), 400
+    if score < 0 or score > total or total > 10:
+        return jsonify({'success': False, 'message': 'Score out of valid range.'}), 400
+    
+    conn = get_db()
+    try:
+        conn.execute('INSERT INTO quiz_scores (user_id, score, total) VALUES (?, ?, ?)',
+                     (current_user.id, score, total))
+        conn.commit()
+    finally:
+        conn.close()
+    return jsonify({'success': True})
 
 @app.route('/leaderboard')
 def leaderboard():

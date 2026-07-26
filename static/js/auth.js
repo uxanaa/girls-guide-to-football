@@ -198,7 +198,7 @@ function loadLeaderboard() {
         const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
         html += `<tr style="border-bottom:1px solid #f0b8d8; text-align:center;">
           <td style="padding:10px;">${medal}</td>
-          <td style="padding:10px;">${row.username}</td>
+          <td style="padding:10px;">${row.username.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</td>
           <td style="padding:10px;">${row.best_score} / 10</td>
         </tr>`;
       });

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from datetime import timedelta
+from dotenv import load_dotenv
 import sqlite3
 import os
 import urllib.request
@@ -17,7 +18,9 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'home'
 
-OPENROUTER_API_KEY = "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"
+
+load_dotenv()
+OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 
 # ── DATABASE ──────────────────────────────────────────────────────
 def get_db():

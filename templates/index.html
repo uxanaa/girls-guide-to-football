@@ -6,8 +6,6 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 <script>
-  // Runs synchronously before page paints, prevents flash
-  var __tab = localStorage.getItem('activeTab') || '#tab_1';
   document.write('<style>[data-tab-info]{display:none!important}.active[data-tab-info]{display:block!important}</style>');
 </script>
 
@@ -31,55 +29,95 @@
       <span data-tab-value="#tab_2">Positions</span>
       <span data-tab-value="#tab_3">Rules</span>
       <span data-tab-value="#tab_4">Leagues</span>
-      <span data-tab-value="#tab_5">Players</span>
-      <span data-tab-value="#tab_6">Quiz</span>
-      <span data-tab-value="#tab_7">⚽ Footy</span>
-      <span class="tab-login" onclick="document.getElementById('loginModal').style.display='flex'">&#128100; Login</span>
+      <span data-tab-value="#tab_5">Quiz</span>
+      <span data-tab-value="#tab_6">⚽ Footy</span>
+      <span data-tab-value="#tab_7">🏆 Leaderboard</span>
+      <span class="tab-login" id="loginBtn" onclick="document.getElementById('loginModal').style.display='flex'">&#128100; Login</span>
+      <span class="tab-login" id="logoutBtn" style="display:none;" onclick="submitLogout()">&#128100; <span id="navUsername"></span> | Logout</span>
     </div>
 
-    <!-- Login Modal -->
+    <!-- Login/Register Modal -->
     <div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
       <div style="background:#fff; border-radius:12px; padding:2rem; width:340px; box-shadow:0 8px 32px rgba(235,23,143,0.2); font-family:'Lora',serif; position:relative;">
         
-        <!-- Close button -->
-        <span onclick="document.getElementById('loginModal').style.display='none'" 
-          style="position:absolute; top:12px; right:16px; font-size:20px; cursor:pointer; color:#aaa;">&times;</span>
+        <span onclick="closeModal()" style="position:absolute; top:12px; right:16px; font-size:20px; cursor:pointer; color:#aaa;">&times;</span>
 
-        <!-- Header -->
-        <div style="text-align:center; margin-bottom:1.5rem;">
-          <div style="font-size:2rem;">&#9917;</div>
-          <h2 style="color:#EB178F; margin:0.3rem 0; font-family:'Playfair Display',serif;">Welcome Back!</h2>
-          <p style="color:#999; font-size:13px; font-family:'Source Sans Pro',sans-serif; margin:0;">Sign in to save your quiz scores</p>
+        <!-- Login View -->
+        <div id="loginView">
+          <div style="text-align:center; margin-bottom:1.5rem;">
+            <div style="font-size:2rem;">⚽</div>
+            <h2 style="color:#EB178F; margin:0.3rem 0; font-family:'Playfair Display',serif;">Welcome Back!</h2>
+            <p style="color:#999; font-size:13px; font-family:'Source Sans Pro',sans-serif; margin:0;">Sign in to save your quiz scores</p>
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Username</label>
+            <input id="loginUsername" type="text" placeholder="Enter your username..."
+              style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+          </div>
+
+          <div style="margin-bottom:1.5rem;">
+            <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Password</label>
+            <input id="loginPassword" type="password" placeholder="Enter your password..."
+              style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+          </div>
+
+          <div id="loginError" style="color:#f44336; font-size:13px; text-align:center; margin-bottom:10px; display:none;"></div>
+
+          <button onclick="submitLogin()" style="width:100%; padding:12px; background:#EB178F; color:white; border:none; border-radius:8px; font-size:15px; font-family:'Lora',serif; font-weight:bold; cursor:pointer; letter-spacing:0.5px;">
+            Login ⚽
+          </button>
+
+          <div style="text-align:center; margin:1rem 0; color:#ccc; font-size:12px;">― or ―</div>
+
+          <button onclick="showRegister()" style="width:100%; padding:11px; background:#fff; color:#EB178F; border:2px solid #EB178F; border-radius:8px; font-size:14px; font-family:'Lora',serif; cursor:pointer;">
+            Create an Account
+          </button>
+
+          <p style="text-align:center; font-size:11px; color:#bbb; margin-top:1rem; font-family:'Source Sans Pro',sans-serif;">
+            Logged-in users can save scores &amp; view the leaderboard
+          </p>
         </div>
 
-        <!-- Form -->
-        <div style="margin-bottom:1rem;">
-          <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Username or Email</label>
-          <input type="text" placeholder="Enter your username..." 
-            style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+        <!-- Register View -->
+        <div id="registerView" style="display:none;">
+          <div style="text-align:center; margin-bottom:1.5rem;">
+            <div style="font-size:2rem;">⚽</div>
+            <h2 style="color:#EB178F; margin:0.3rem 0; font-family:'Playfair Display',serif;">Create Account</h2>
+            <p style="color:#999; font-size:13px; font-family:'Source Sans Pro',sans-serif; margin:0;">Join to save scores and compete!</p>
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Username</label>
+            <input id="regUsername" type="text" placeholder="Choose a username..."
+              style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Email</label>
+            <input id="regEmail" type="email" placeholder="Enter your email..."
+              style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+          </div>
+
+          <div style="margin-bottom:1.5rem;">
+            <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Password</label>
+            <input id="regPassword" type="password" placeholder="Choose a password..."
+              style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
+          </div>
+
+          <div id="registerMsg" style="font-size:13px; text-align:center; margin-bottom:10px; display:none;"></div>
+
+          <button onclick="submitRegister()" style="width:100%; padding:12px; background:#EB178F; color:white; border:none; border-radius:8px; font-size:15px; font-family:'Lora',serif; font-weight:bold; cursor:pointer;">
+            Create Account ⚽
+          </button>
+
+          <div style="text-align:center; margin:1rem 0; color:#ccc; font-size:12px;">― or ―</div>
+
+          <button onclick="showLogin()" style="width:100%; padding:11px; background:#fff; color:#EB178F; border:2px solid #EB178F; border-radius:8px; font-size:14px; font-family:'Lora',serif; cursor:pointer;">
+            Back to Login
+          </button>
         </div>
-        <div style="margin-bottom:1.5rem;">
-          <label style="font-size:13px; color:#555; display:block; margin-bottom:4px;">Password</label>
-          <input type="password" placeholder="Enter your password..." 
-            style="width:100%; padding:10px 12px; border:1px solid #f0b8d8; border-radius:8px; font-size:14px; font-family:'Source Sans Pro',sans-serif; box-sizing:border-box; outline:none;">
-        </div>
 
-        <!-- Login button -->
-        <button style="width:100%; padding:12px; background:#EB178F; color:white; border:none; border-radius:8px; font-size:15px; font-family:'Lora',serif; font-weight:bold; cursor:pointer; letter-spacing:0.5px;">
-          Login &#9917;
-        </button>
-
-        <!-- Divider -->
-        <div style="text-align:center; margin:1rem 0; color:#ccc; font-size:12px;">― or ―</div>
-
-        <!-- Register link -->
-        <button style="width:100%; padding:11px; background:#fff; color:#EB178F; border:2px solid #EB178F; border-radius:8px; font-size:14px; font-family:'Lora',serif; cursor:pointer;">
-          Create an Account
-        </button>
-
-        <p style="text-align:center; font-size:11px; color:#bbb; margin-top:1rem; font-family:'Source Sans Pro',sans-serif;">
-          Logged-in users can save scores &amp; view the leaderboard
-        </p>
       </div>
     </div>
 
@@ -178,22 +216,211 @@
       <div class="tabs__tab" id="tab_3" data-tab-info>
         <main>
           <h1> Rules </h1>
-          <h3>Basics Of The Game</h3>
-          <p>Key rules of football include:</p>
+          <h3>Key Rules Of The Game</h3>
           <ul>
-            <li>Offside: A player is offside if they are nearer to the opponent's goal line than both the ball and the second-last defender (with the last defender being the goalkeeper) when the ball is passed to them.</li>  
             <li>Fouls: Actions such as tripping, pushing, or handling the ball (except the goalkeeper in their area) are considered fouls and can result in free kicks or penalties.</li>  
-            <li>Free Kicks and Penalties: A free kick is awarded for a foul, while a penalty kick is given when a foul occurs inside the penalty box.</li>  
             <li>Yellow Card: Players can be cautioned with a yellow card for unsporting behavior.</li>
             <li>Red Card: A red card is issued for serious fouls or misconduct, resulting in the player’s expulsion from the game.</li>
             <li>The goalkeeper is the only player allowed to use their hands and arms, but only within the penalty area.</li>
-            <li>The opposition must not enter the centre circle until after the kick-off (start of the game).</li>
+            <li>The opposition must not enter the centre circle until after kick-off (start of the game).</li>
+            <li>The game is played with the ball primarily using feet, but players can also use their heads or chests to control or pass the ball. The team with the most goals at the end of the game wins!</li>
           </ul>
-          
-          <p>
-            The game is played with the ball primarily using feet, but players can also use their heads or chests to control or pass the ball. The team with the most goals at the end of the game wins!
-          </p>
 
+
+          <h3>The Offside Rule - Illustrated</h3>
+          <p>The offside rule is one of the most misunderstood rules in football. The diagram below shows three scenarios, click each button to see the difference between offside and onside positions.</p>
+
+          <svg width="60%" viewBox="0 0 680 520" role="img" style="display:block; margin:0 auto;">
+            
+            <desc>Interactive football pitch diagram showing onside and offside positions.</desc>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </marker>
+            </defs>
+
+            <rect x="40" y="40" width="600" height="340" rx="6" fill="#2d8a3e"/>
+            <rect x="40" y="40" width="600" height="340" rx="6" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <line x1="340" y1="40" x2="340" y2="380" stroke="#fff" stroke-width="1" opacity="0.6"/>
+            <circle cx="340" cy="210" r="50" fill="none" stroke="#fff" stroke-width="1" opacity="0.4"/>
+            <rect x="40" y="120" width="90" height="180" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
+            <rect x="40" y="165" width="40" height="90" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
+            <rect x="550" y="120" width="90" height="180" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
+            <rect x="600" y="165" width="40" height="90" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
+
+            <g id="scene-offside">
+              <line x1="500" y1="40" x2="500" y2="380" stroke="#FF4444" stroke-width="2" stroke-dasharray="6 4"/>
+              <text x="504" y="58" fill="#FF4444" font-size="11" font-family="sans-serif" font-weight="600">Last defender</text>
+              <circle cx="540" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
+              <text x="540" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">A</text>
+              <text x="540" y="230" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Attacker</text>
+              <text x="540" y="175" text-anchor="middle" fill="#FF4444" font-size="18" font-family="sans-serif">✕</text>
+              <text x="540" y="162" text-anchor="middle" fill="#FF4444" font-size="10" font-family="sans-serif" font-weight="700">OFFSIDE</text>
+              <circle cx="70" cy="210" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="70" y="215" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+              <circle cx="500" cy="240" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="500" y="245" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">D</text>
+              <circle cx="360" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
+              <text x="360" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">P</text>
+              <circle cx="383" cy="200" r="8" fill="#fff" stroke="#333" stroke-width="1.5"/>
+              <line x1="391" y1="200" x2="520" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+              <rect x="80" y="395" width="520" height="36" rx="6" fill="#FF444422"/>
+              <text x="340" y="410" text-anchor="middle" fill="#FF4444" font-size="12" font-family="sans-serif" font-weight="600">⚠ Offside: attacker (A) is beyond the last defender (D) when the ball is passed</text>
+              <text x="340" y="425" text-anchor="middle" fill="#FF4444" font-size="11" font-family="sans-serif">Free kick awarded to the defending team</text>
+            </g>
+
+            <g id="scene-onside" display="none">
+              <line x1="500" y1="40" x2="500" y2="380" stroke="#44BB44" stroke-width="2" stroke-dasharray="6 4"/>
+              <text x="504" y="58" fill="#44BB44" font-size="11" font-family="sans-serif" font-weight="600">Last defender</text>
+              <circle cx="460" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
+              <text x="460" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">A</text>
+              <text x="460" y="230" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Attacker</text>
+              <text x="460" y="175" text-anchor="middle" fill="#44BB44" font-size="18" font-family="sans-serif">✓</text>
+              <text x="460" y="162" text-anchor="middle" fill="#44BB44" font-size="10" font-family="sans-serif" font-weight="700">ONSIDE</text>
+              <circle cx="70" cy="210" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="70" y="215" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+              <circle cx="500" cy="240" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="500" y="245" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">D</text>
+              <circle cx="360" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
+              <text x="360" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">P</text>
+              <circle cx="383" cy="200" r="8" fill="#fff" stroke="#333" stroke-width="1.5"/>
+              <line x1="391" y1="200" x2="440" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+              <rect x="80" y="395" width="520" height="36" rx="6" fill="#44BB4422"/>
+              <text x="340" y="410" text-anchor="middle" fill="#44BB44" font-size="12" font-family="sans-serif" font-weight="600">✓ Onside: attacker (A) is level with or behind the last defender (D)</text>
+              <text x="340" y="425" text-anchor="middle" fill="#44BB44" font-size="11" font-family="sans-serif">Play continues — the pass is legal</text>
+            </g>
+
+            <g id="scene-gk" display="none">
+              <line x1="100" y1="40" x2="100" y2="380" stroke="#FF4444" stroke-width="2" stroke-dasharray="6 4"/>
+              <text x="104" y="58" fill="#FF4444" font-size="11" font-family="sans-serif" font-weight="600">Goalkeeper (last defender)</text>
+              <circle cx="70" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
+              <text x="70" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">A</text>
+              <text x="70" y="230" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Attacker</text>
+              <text x="70" y="175" text-anchor="middle" fill="#FF4444" font-size="18" font-family="sans-serif">✕</text>
+              <text x="70" y="162" text-anchor="middle" fill="#FF4444" font-size="10" font-family="sans-serif" font-weight="700">OFFSIDE</text>
+              <circle cx="100" cy="290" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="100" y="295" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+              <circle cx="360" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
+              <text x="360" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">P</text>
+              <circle cx="383" cy="200" r="8" fill="#fff" stroke="#333" stroke-width="1.5"/>
+              <line x1="300" y1="200" x2="92" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+              <rect x="80" y="395" width="520" height="36" rx="6" fill="#FF444422"/>
+              <text x="340" y="410" text-anchor="middle" fill="#FF4444" font-size="12" font-family="sans-serif" font-weight="600">⚠ The goalkeeper counts as the last defender</text>
+              <text x="340" y="425" text-anchor="middle" fill="#FF4444" font-size="11" font-family="sans-serif">The attacker must be behind at least one outfield player, or level with the GK</text>
+            </g>
+
+            <circle cx="56" cy="458" r="8" fill="#FFD700" stroke="#fff" stroke-width="1.5"/>
+            <text x="70" y="462" fill="#EB178F" font-size="11" font-family="sans-serif">Attacking team</text>
+            <circle cx="160" cy="458" r="8" fill="#4488FF" stroke="#fff" stroke-width="1.5"/>
+            <text x="174" y="462" fill="#EB178F" font-size="11" font-family="sans-serif">Defending team</text>
+            <circle cx="266" cy="458" r="6" fill="#fff" stroke="#333" stroke-width="1.5"/>
+            <text x="278" y="462" fill="#EB178F" font-size="11" font-family="sans-serif">Ball / pass direction</text>
+          </svg>
+
+          <div style="display:flex; gap:10px; margin:8px 0 16px; flex-wrap:wrap;">
+            <button onclick="showOffsideScene('offside')" style="padding:7px 18px; background:#EB178F; color:white; border:none; border-radius:8px; font-size:13px; font-family:'Lora',serif; font-weight:bold; cursor:pointer;">✕ Offside</button>
+            <button onclick="showOffsideScene('onside')" style="padding:7px 18px; background:#4CAF50; color:white; border:none; border-radius:8px; font-size:13px; font-family:'Lora',serif; font-weight:bold; cursor:pointer;">✓ Onside</button>
+            <button onclick="showOffsideScene('gk')" style="padding:7px 18px; background:#2196F3; color:white; border:none; border-radius:8px; font-size:13px; font-family:'Lora',serif; font-weight:bold; cursor:pointer;">🧤 Goalkeeper only</button>
+          </div>
+
+          <script>
+          function showOffsideScene(scene) {
+            ['offside','onside','gk'].forEach(function(s) {
+              document.getElementById('scene-' + s).setAttribute('display', s === scene ? '' : 'none');
+            });
+          }
+          </script>
+
+          <h3>Free Kicks and Penalties - Illustrated</h3>
+          <p>When a foul is committed, the referee awards either a free kick or a penalty depending on where the foul happened.</p>
+
+          <svg width="60%" viewBox="0 0 680 520" role="img" style="display:block; margin:0 auto;">
+            <title>Free kicks and penalties</title>
+            <desc>Diagram showing free kick and penalty scenarios on a football pitch.</desc>
+            <defs>
+              <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </marker>
+            </defs>
+
+            <rect x="40" y="40" width="600" height="340" rx="6" fill="#2d8a3e"/>
+            <rect x="40" y="40" width="600" height="340" rx="6" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <line x1="340" y1="40" x2="340" y2="380" stroke="#fff" stroke-width="1" opacity="0.4"/>
+            <rect x="510" y="110" width="130" height="180" fill="none" stroke="#fff" stroke-width="1" opacity="0.7"/>
+            <rect x="580" y="148" width="60" height="104" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
+            <rect x="628" y="162" width="14" height="76" fill="none" stroke="#fff" stroke-width="2.5"/>
+            <circle cx="555" cy="200" r="4" fill="#fff"/>
+            <path d="M510 178 A46 46 0 0 0 510 222" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
+            <rect x="40" y="110" width="130" height="180" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
+            <rect x="40" y="148" width="60" height="104" fill="none" stroke="#fff" stroke-width="1" opacity="0.4"/>
+            <rect x="38" y="162" width="14" height="76" fill="none" stroke="#fff" stroke-width="2"/>
+            <circle cx="340" cy="210" r="50" fill="none" stroke="#fff" stroke-width="1" opacity="0.3"/>
+
+            <!-- FREE KICK -->
+            <g id="s-fk">
+              <circle cx="410" cy="200" r="40" fill="none" stroke="#FFD700" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.6"/>
+              <text x="410" y="155" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">9.15m</text>
+              <rect x="453" y="188" width="12" height="20" rx="3" fill="#4488FF" stroke="#fff" stroke-width="1"/>
+              <rect x="466" y="188" width="12" height="20" rx="3" fill="#4488FF" stroke="#fff" stroke-width="1"/>
+              <rect x="479" y="188" width="12" height="20" rx="3" fill="#4488FF" stroke="#fff" stroke-width="1"/>
+              <text x="468" y="222" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif">Wall</text>
+              <circle cx="634" cy="192" r="14" fill="#4488FF" stroke="#fff" stroke-width="1.5"/>
+              <text x="634" y="196" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif" font-weight="700">GK</text>
+              <circle cx="410" cy="200" r="9" fill="#fff" stroke="#333" stroke-width="1.5"/>
+              <circle cx="380" cy="200" r="14" fill="#FFD700" stroke="#fff" stroke-width="1.5"/>
+              <text x="380" y="204" text-anchor="middle" fill="#111" font-size="10" font-family="sans-serif" font-weight="700">K</text>
+              <path d="M419 197 Q468 155 622 170" fill="none" stroke="#FFD700" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arr3)"/>
+              <path d="M419 203 Q490 230 622 215" fill="none" stroke="#FF8844" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arr3)" opacity="0.9"/>
+              <rect x="60" y="300" width="560" height="36" rx="6" fill="#FF444422"/>
+              <text x="340" y="315" text-anchor="middle" fill="#FFD700" font-size="12" font-family="sans-serif" font-weight="600">Free Kick — foul outside the penalty box</text>
+              <text x="340" y="330" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Opponents 9.15m away. Kicker shoots over or around the wall.</text>
+              <circle cx="56" cy="420" r="8" fill="#FFD700" stroke="#fff" stroke-width="1.5"/>
+              <text x="70" y="424" fill="#EB178F" font-size="11" font-family="sans-serif">Attacking team</text>
+              <circle cx="170" cy="420" r="8" fill="#4488FF" stroke="#fff" stroke-width="1.5"/>
+              <text x="184" y="424" fill="#EB178F" font-size="11" font-family="sans-serif">Defending team</text>
+              <circle cx="284" cy="420" r="6" fill="#fff" stroke="#333" stroke-width="1.5"/>
+              <text x="296" y="424" fill="#EB178F" font-size="11" font-family="sans-serif">Ball</text>
+            </g>
+
+            <!-- PENALTY -->
+            <g id="s-pen" display="none">
+              <circle cx="555" cy="200" r="9" fill="#fff" stroke="#333" stroke-width="1.5"/>
+              <circle cx="518" cy="200" r="14" fill="#FFD700" stroke="#fff" stroke-width="1.5"/>
+              <text x="518" y="204" text-anchor="middle" fill="#111" font-size="10" font-family="sans-serif" font-weight="700">K</text>
+              <line x1="533" y1="200" x2="544" y2="200" stroke="#FFD700" stroke-width="1.5" marker-end="url(#arr3)"/>
+              <circle cx="634" cy="200" r="14" fill="#4488FF" stroke="#fff" stroke-width="1.5"/>
+              <text x="634" y="204" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif" font-weight="700">GK</text>
+              <path d="M564 197 Q596 165 622 172" fill="none" stroke="#FFD700" stroke-width="2.5" stroke-dasharray="5 3" marker-end="url(#arr3)"/>
+              <path d="M564 203 Q598 235 622 228" fill="none" stroke="#FF8844" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arr3)" opacity="0.9"/>
+              <circle cx="484" cy="170" r="11" fill="#FFD700" stroke="#fff" stroke-width="1" opacity="0.7"/>
+              <circle cx="484" cy="230" r="11" fill="#4488FF" stroke="#fff" stroke-width="1" opacity="0.7"/>
+              <circle cx="464" cy="200" r="11" fill="#4488FF" stroke="#fff" stroke-width="1" opacity="0.7"/>
+              <text x="455" y="148" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif">All others</text>
+              <text x="455" y="160" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif">wait outside</text>
+              <rect x="60" y="300" width="560" height="36" rx="6" fill="#FF444422"/>
+              <text x="340" y="315" text-anchor="middle" fill="#FF8844" font-size="12" font-family="sans-serif" font-weight="600">Penalty — foul inside the penalty box</text>
+              <text x="340" y="330" text-anchor="middle" fill="#FF8844" font-size="11" font-family="sans-serif">One-on-one from 11m. Just K vs GK — everyone else waits outside.</text>
+              <circle cx="56" cy="420" r="8" fill="#FFD700" stroke="#fff" stroke-width="1.5"/>
+              <text x="70" y="424" fill="#EB178F" font-size="11" font-family="sans-serif">Attacking team</text>
+              <circle cx="170" cy="420" r="8" fill="#4488FF" stroke="#fff" stroke-width="1.5"/>
+              <text x="184" y="424" fill="#EB178F" font-size="11" font-family="sans-serif">Defending team</text>
+              <circle cx="284" cy="420" r="6" fill="#fff" stroke="#333" stroke-width="1.5"/>
+              <text x="296" y="424" fill="#EB178F" font-size="11" font-family="sans-serif">Ball</text>
+            </g>
+
+          </svg>
+
+          <div style="display:flex; gap:10px; margin:8px 0 16px; flex-wrap:wrap;">
+            <button onclick="showKickScene('fk')" style="padding:7px 20px; background:#EB178F; color:white; border:none; border-radius:8px; font-size:13px; font-family:'Lora',serif; font-weight:bold; cursor:pointer;">⚽ Free Kick</button>
+            <button onclick="showKickScene('pen')" style="padding:7px 20px; background:#FF8844; color:white; border:none; border-radius:8px; font-size:13px; font-family:'Lora',serif; font-weight:bold; cursor:pointer;">🥅 Penalty</button>
+          </div>
+
+          <script>
+          function showKickScene(s) {
+            document.getElementById('s-fk').setAttribute('display', s==='fk' ? '' : 'none');
+            document.getElementById('s-pen').setAttribute('display', s==='pen' ? '' : 'none');
+          }
+          </script>
         </main>
       </div>
 
@@ -266,18 +493,9 @@
       </div>
 
 
-
-      <div class="tabs__tab" id="tab_5" data-tab-info>
-      <main>
-        <h1>Players</h1>
-          
-      </main>
-      </div>
-
-
   
 <!-- Quiz -->
-<div class="tabs__tab" id="tab_6" data-tab-info>
+<div class="tabs__tab" id="tab_5" data-tab-info>
   <main>
     <h1>Quiz</h1>
     <!-- Quiz Container -->
@@ -293,12 +511,9 @@
       
 
 <!-- Footy AI Chatbot Tab -->
-<div class="tabs__tab" id="tab_7" data-tab-info>
+<div class="tabs__tab" id="tab_6" data-tab-info>
   <main>
     <h1>⚽ Ask Footy</h1>
-    <p style="text-align:center; color:#888; font-family:'Source Sans Pro',sans-serif; font-size:14px; margin-top:0;">
-      Your AI football guide — ask me anything about the beautiful game!
-    </p>
 
     <div id="footy-chat-window" style="
       border: 1px solid #f0b8d8;
@@ -316,7 +531,7 @@
       <div class="footy-msg footy-msg--bot">
         <span class="footy-avatar">⚽</span>
         <div class="footy-bubble footy-bubble--bot">
-          Hi! I'm Footy, your football guide 🎉 Ask me about rules, positions, leagues, players, tactics — anything football!
+          Hi! I'm Footy, your football guide 🎉 Ask me anything about football!
         </div>
       </div>
     </div>
@@ -358,11 +573,29 @@
     </p>
   </main>
 </div>
+
+
+
+  <!-- Leaderboard Tab -->
+  <div class="tabs__tab" id="tab_7" data-tab-info>
+    <main>
+      <h1>🏆 Leaderboard</h1>
+      <p style="text-align:center; color:#888; font-family:'Source Sans Pro',sans-serif;">
+        Login and complete a quiz to compete!
+      </p>
+      <div id="leaderboard-container" style="max-width:500px; margin:0 auto; padding:1rem;">
+        <p style="text-align:center; color:#aaa;">Loading...</p>
+      </div>
+    </main>
+  </div>
+
+
     </div>
   </div>
   
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   <script src="{{ url_for('static', filename='js/footy.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 </body>
 
 <footer>

@@ -8,7 +8,7 @@
 // ── 1. SYSTEM PROMPT ─────────────────────────────────────────────
 // This is the instruction we send to the AI before every conversation.
 // It tells the AI who it is and what it is allowed to talk about.
-// This is your "prompt injection defence" — the AI is told to ignore
+// This is your "prompt injection defence" the AI is told to ignore
 // any attempt to make it talk about non-football topics.
 
 const FOOTY_SYSTEM_PROMPT = `You are Footy, a friendly and knowledgeable football (soccer) guide on a website called "A Girl's Guide to Football", designed to help girls and young women learn about football.
@@ -59,9 +59,9 @@ async function sendFootyMessage() {
   const typingId = appendFootyTyping();
 
   try {
-    // Send the conversation to our proxy server
-    // The proxy forwards it to Groq and sends the reply back
-    const response = await fetch('http://localhost:8000/chat', {
+    // Send the conversation to Flask
+    // Flask forwards it to OpenRouter and sends the reply back
+    const response = await fetch('/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

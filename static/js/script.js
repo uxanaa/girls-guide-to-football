@@ -1,11 +1,22 @@
- // Restore saved tab immediately
+// Restore saved tab on refresh, but go home on new visit
+// We use sessionStorage to store the tab, and a flag to detect
+// whether this is a refresh or a brand new visit
 (function() {
-  var savedTab = localStorage.getItem('activeTab');
-  if (savedTab && savedTab !== '#tab_1') {
-    var allTabs = document.querySelectorAll('[data-tab-info]');
-    allTabs.forEach(function(t) { t.classList.remove('active'); });
-    var target = document.querySelector(savedTab);
-    if (target) target.classList.add('active');
+  // Check if this is a refresh or a new visit
+  var isRefresh = sessionStorage.getItem('visited');
+  
+  if (isRefresh) {
+    // Page was refreshed — restore the saved tab
+    var savedTab = sessionStorage.getItem('activeTab');
+    if (savedTab && savedTab !== '#tab_1') {
+      var allTabs = document.querySelectorAll('[data-tab-info]');
+      allTabs.forEach(function(t) { t.classList.remove('active'); });
+      var target = document.querySelector(savedTab);
+      if (target) target.classList.add('active');
+    }
+  } else {
+    // Brand new visit, mark as visited and go to home
+    sessionStorage.setItem('visited', 'true');
   }
 })();
 
@@ -22,7 +33,7 @@ tabs.forEach(tab => {
       tabInfo.classList.remove('active')
     })
     target.classList.add('active');
-    localStorage.setItem('activeTab', tab.dataset.tabValue);
+    sessionStorage.setItem('activeTab', tab.dataset.tabValue);
   })
 })
 
@@ -250,7 +261,7 @@ function showResults() {
       ${correctAnswers === quizQuestions.length 
         ? '🎉 Perfect score! You know your football!' 
         : correctAnswers >= 7 
-        ? '⚽ Great effort! Keep learning!' 
+        ? 'Great effort!' 
         : 'Keep practising!'}
     </p>
     <button onclick="restartQuiz()" style="

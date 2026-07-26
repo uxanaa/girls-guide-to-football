@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from datetime import timedelta
 import sqlite3
 import os
 import urllib.request
@@ -9,16 +10,18 @@ import json
 app = Flask(__name__)
 app.secret_key = 'footy_secret_key_change_this_later'
 
+# User sessions expire after 30 minutes of inactivity
+app.permanent_session_lifetime = timedelta(minutes=30)
+
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'home'
 
-GROQ_API_KEY = "yourAPIkey"
-GROQ_MODEL = "llama3-8b-8192"
+OPENROUTER_API_KEY = "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"
 
 # ── DATABASE ──────────────────────────────────────────────────────
 def get_db():
-    conn = sqlite3.connect('footy.db')
+    conn = sqlite3.connect('footy.db', timeout=10)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -101,6 +104,7 @@ def login():
 
     if user and bcrypt.check_password_hash(user['password_hash'], password):
         user_obj = User(user['id'], user['username'], user['email'])
+        session.permanent = True
         login_user(user_obj)
         return jsonify({'success': True, 'username': user['username']})
     
@@ -119,10 +123,12 @@ def save_score():
     score = data.get('score')
     total = data.get('total')
     conn = get_db()
-    conn.execute('INSERT INTO quiz_scores (user_id, score, total) VALUES (?, ?, ?)',
-                 (current_user.id, score, total))
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute('INSERT INTO quiz_scores (user_id, score, total) VALUES (?, ?, ?)',
+                     (current_user.id, score, total))
+        conn.commit()
+    finally:
+        conn.close()
     return jsonify({'success': True})
 
 @app.route('/my_scores')
@@ -153,47 +159,53 @@ def leaderboard():
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.get_json()
-    
+
     FOOTY_SYSTEM_PROMPT = """You are Footy, a friendly and knowledgeable football guide on A Girl's Guide to Football.
 You ONLY answer questions about football. If asked about anything else, politely decline and redirect to football topics."""
 
-    groq_body = json.dumps({
-        "model": GROQ_MODEL,
+    messages = data.get('messages', [])
+
+    body = json.dumps({
+        "model": "google/gemma-4-26b-a4b-it:free",
         "messages": [
             {"role": "system", "content": FOOTY_SYSTEM_PROMPT}
-        ] + data.get('messages', [])
+        ] + messages
     }).encode()
 
     req = urllib.request.Request(
-        "https://api.groq.com/openai/v1/chat/completions",
-        data=groq_body,
+        "https://openrouter.ai/api/v1/chat/completions",
+        data=body,
         headers={
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + GROQ_API_KEY
+            "Authorization": "Bearer " + OPENROUTER_API_KEY,
+            "HTTP-Referer": "http://localhost:5000",
+            "X-Title": "A Girls Guide to Football"
         },
         method="POST"
     )
 
     try:
         with urllib.request.urlopen(req) as resp:
-            groq_data = json.loads(resp.read())
+            result_data = json.loads(resp.read())
+        text = result_data["choices"][0]["message"]["content"]
         result = {
             "content": [{
                 "type": "text",
-                "text": groq_data["choices"][0]["message"]["content"]
+                "text": text
             }]
         }
         return jsonify(result)
     except Exception as e:
+        print("CHAT ERROR:", str(e))
         return jsonify({"error": str(e)}), 500
-
+    
+    
 @app.route('/current_user_info')
 def current_user_info():
     if current_user.is_authenticated:
         return jsonify({'logged_in': True, 'username': current_user.username})
     return jsonify({'logged_in': False})
 
-# ── RUN ───────────────────────────────────────────────────────────
 if __name__ == '__main__':
     init_db()
     print('Footy app running at http://localhost:5000')

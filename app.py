@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_wtf.csrf import CSRFProtect
 from datetime import timedelta
 from dotenv import load_dotenv
 import sqlite3
@@ -8,13 +9,7 @@ import os
 import urllib.request
 import json
 
-# Security headers
-@app.after_request
-def set_security_headers(response):
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-Frame-Options'] = 'DENY'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
-    return response
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'fallback-dev-key')
@@ -27,9 +22,22 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'home'
 
+# CSRF protection, guards all state-changing (POST) requests.
+# The token is rendered into the page via csrf_token() and sent
+# back by the frontend in the X-CSRFToken header on each POST.
+csrf = CSRFProtect(app)
 
-load_dotenv()
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
+
+
+# Security headers — applied to every response
+@app.after_request
+def set_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
+
 
 # ── DATABASE ──────────────────────────────────────────────────────
 def get_db():
@@ -119,10 +127,10 @@ def login():
         session.permanent = True
         login_user(user_obj)
         return jsonify({'success': True, 'username': user['username']})
-    
+
     return jsonify({'success': False, 'message': 'Incorrect username or password.'})
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
@@ -134,6 +142,13 @@ def save_score():
     data = request.get_json()
     score = data.get('score')
     total = data.get('total')
+
+    # Server-side validation, reject impossible scores
+    if not isinstance(score, int) or not isinstance(total, int):
+        return jsonify({'success': False, 'message': 'Invalid score data.'}), 400
+    if score < 0 or score > total or total > 10:
+        return jsonify({'success': False, 'message': 'Score out of valid range.'}), 400
+
     conn = get_db()
     try:
         conn.execute('INSERT INTO quiz_scores (user_id, score, total) VALUES (?, ?, ?)',
@@ -153,28 +168,6 @@ def my_scores():
     ).fetchall()
     conn.close()
     return jsonify({'scores': [dict(s) for s in scores]})
-
-@app.route('/save_score', methods=['POST'])
-@login_required
-def save_score():
-    data = request.get_json()
-    score = data.get('score')
-    total = data.get('total')
-    
-    # Server-side validation — reject impossible scores
-    if not isinstance(score, int) or not isinstance(total, int):
-        return jsonify({'success': False, 'message': 'Invalid score data.'}), 400
-    if score < 0 or score > total or total > 10:
-        return jsonify({'success': False, 'message': 'Score out of valid range.'}), 400
-    
-    conn = get_db()
-    try:
-        conn.execute('INSERT INTO quiz_scores (user_id, score, total) VALUES (?, ?, ?)',
-                     (current_user.id, score, total))
-        conn.commit()
-    finally:
-        conn.close()
-    return jsonify({'success': True})
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -232,8 +225,8 @@ You ONLY answer questions about football. If asked about anything else, politely
     except Exception as e:
         print("CHAT ERROR:", str(e))
         return jsonify({"error": str(e)}), 500
-    
-    
+
+
 @app.route('/current_user_info')
 def current_user_info():
     if current_user.is_authenticated:

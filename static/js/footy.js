@@ -63,7 +63,10 @@ async function sendFootyMessage() {
     // Flask forwards it to OpenRouter and sends the reply back
     const response = await fetch('/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken()
+      },
       body: JSON.stringify({
         messages: footyHistory,
         system: FOOTY_SYSTEM_PROMPT

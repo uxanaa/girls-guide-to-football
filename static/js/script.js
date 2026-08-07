@@ -1,3 +1,8 @@
+function getCsrfToken() {
+  const meta = document.querySelector('meta[name="csrf-token"]');
+  return meta ? meta.getAttribute('content') : '';
+}
+
 // Restore saved tab on refresh, but go home on new visit
 // We use sessionStorage to store the tab, and a flag to detect
 // whether this is a refresh or a brand new visit
@@ -280,10 +285,13 @@ function showResults() {
 
   // Save score to Flask if logged in
   fetch('/save_score', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ score: correctAnswers, total: quizQuestions.length })
-  }).catch(() => {});
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken()
+      },
+      body: JSON.stringify({ score: correctAnswers, total: quizQuestions.length })
+    }).catch(() => {});
 }
 
 function restartQuiz() {

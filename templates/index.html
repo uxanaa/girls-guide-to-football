@@ -9,13 +9,12 @@
   document.write('<style>[data-tab-info]{display:none!important}.active[data-tab-info]{display:block!important}</style>');
 </script>
 
-
 <link href="https://fonts.googleapis.com/css?family=Work+Sans:900" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@700&family=Source+Sans+Pro:wght@400&display=swap" rel="stylesheet">
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="loading">
@@ -502,7 +501,6 @@
     <div class="quiz-container">
       <!-- Display remaining questions -->
       <div id="remaining-questions" class="remaining-questions"></div>
-
       <div id="quiz"></div>
       <div id="result" class="result"></div>
     </div>

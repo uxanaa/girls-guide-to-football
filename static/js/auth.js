@@ -96,7 +96,10 @@ function submitLogin() {
   // using a POST request with JSON data
   fetch('/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCsrfToken()
+    },
     body: JSON.stringify({ username, password }) // converts to JSON string
   })
   .then(r => r.json()) // parse Flask's response as JSON
@@ -159,11 +162,14 @@ function submitRegister() {
 // which logs the user out server-side.
 // Then updates the nav bar to show the Login button again.
 function submitLogout() {
-  fetch('/logout')       // calls the Flask /logout route
-    .then(r => r.json()) // parse response
+  fetch('/logout', {
+    method: 'POST',
+    headers: { 'X-CSRFToken': getCsrfToken() }
+  })
+    .then(r => r.json())
     .then(() => {
-      showLoggedOut();   // update nav bar to logged out state
-      loadLeaderboard(); // refresh leaderboard
+      showLoggedOut();
+      loadLeaderboard();
     });
 }
 

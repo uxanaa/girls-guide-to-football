@@ -15,6 +15,30 @@ window.addEventListener('DOMContentLoaded', function() {
   loadLeaderboard();
 });
 
+//Load my scores dashboard
+function loadDashboard() {
+  fetch('/my_scores')
+    .then(r => r.json())
+    .then(data => {
+      const bestEl = document.getElementById('dashboard-best');
+      const histEl = document.getElementById('dashboard-history');
+      if (!bestEl || !histEl) return;
+      bestEl.innerHTML = `<div style="display:inline-block;background:#EB178F;color:white;padding:14px 28px;border-radius:12px;">
+        <div style="font-size:13px;">Personal Best</div>
+        <div style="font-size:28px;font-weight:bold;">${data.best_score} / 10</div></div>`;
+      if (!data.scores || data.scores.length === 0) {
+        histEl.innerHTML = '<p style="text-align:center;color:#aaa;">No attempts yet — take the quiz!</p>';
+        return;
+      }
+      let html = '<table style="width:100%;border-collapse:collapse;"><tr style="background:#EB178F;color:white;"><th style="padding:10px;">#</th><th>Score</th><th>%</th><th>When</th></tr>';
+      data.scores.forEach((s, i) => {
+        const when = s.taken_at ? String(s.taken_at).split('.')[0] : '';
+        html += `<tr style="border-bottom:1px solid #f0b8d8;text-align:center;"><td style="padding:10px;">${i+1}</td><td>${s.score}/${s.total}</td><td>${s.percentage}%</td><td style="font-size:13px;color:#777;">${when}</td></tr>`;
+      });
+      histEl.innerHTML = html + '</table>';
+    })
+    .catch(() => {});
+}
 
 // ── CHECK LOGIN STATUS ────────────────────────────────────────────
 // Sends a request to Flask asking "is anyone logged in right now?"
@@ -27,6 +51,7 @@ function checkLoginStatus() {
     .then(data => {
       if (data.logged_in) {         // if Flask says someone is logged in
         showLoggedIn(data.username); // update the nav bar with their username
+        loadDashboard()
       }
     });
 }
@@ -40,6 +65,9 @@ function showLoggedIn(username) {
   document.getElementById('loginBtn').style.display = 'none';        // hide Login button
   document.getElementById('logoutBtn').style.display = 'inline-block'; // show Logout button
   document.getElementById('navUsername').textContent = username;      // show their username
+  document.getElementById('dashboardTab').style.display = 'inline-block'; // show tab 8
+  const lp = document.getElementById('leaderboardPrompt');               // hide login in text on leaderboard
+  if (lp) lp.style.display = 'none';
 }
 
 
@@ -50,6 +78,9 @@ function showLoggedOut() {
   document.getElementById('loginBtn').style.display = 'inline-block'; // show Login button
   document.getElementById('logoutBtn').style.display = 'none';        // hide Logout button
   document.getElementById('navUsername').textContent = '';             // clear username text
+  document.getElementById('dashboardTab').style.display = 'none';      // hide tab 8
+  const lp = document.getElementById('leaderboardPrompt');            // show login in text on leaderboard
+  if (lp) lp.style.display = 'none';
 }
 
 

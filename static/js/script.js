@@ -217,8 +217,15 @@ function selectAnswer(index) {
     resultContainer.style.color = "#4CAF50";
     correctAnswers++;
   } else {
-    resultContainer.textContent = "❌ Wrong!";
-    resultContainer.style.color = "#f44336";
+  resultContainer.textContent = "❌ Wrong!";
+  resultContainer.style.color = "#f44336";
+  // Record the miss so we can review it at the end
+  const q = quizQuestions[currentQuiz];
+  wrongAnswers.push({
+    question: q.question,
+    yourAnswer: q.options[index],
+    correctAnswer: q.options[q.correct]
+  });
   }
 
   // Move to next question
@@ -260,6 +267,22 @@ function selectAnswer(index) {
 function showResults() {
   quizContainer.innerHTML = '';
   remainingQuestionsContainer.innerHTML = '';
+  let reviewHtml = '';
+  if (wrongAnswers.length === 0) {
+    reviewHtml = `<p style="color:#4CAF50;font-weight:bold;margin-top:1rem;">🌟 You didn't get a single one wrong!</p>`;
+  } else {
+    reviewHtml = `<h4 style="color:#EB178F;margin-top:1.5rem;">Review your ${wrongAnswers.length} incorrect answer(s):</h4>
+      <div style="max-width:600px;margin:0.5rem auto;text-align:left;">`;
+    wrongAnswers.forEach((item, i) => {
+      reviewHtml += `
+        <div style="border:1px solid #f0b8d8;border-radius:8px;padding:12px;margin-bottom:10px;background:#fff9fc;">
+          <p style="font-weight:bold;margin:0 0 6px 0;">${i + 1}. ${escapeQuizHtml(item.question)}</p>
+          <p style="margin:0;color:#f44336;">Your answer: ${escapeQuizHtml(item.yourAnswer)}</p>
+          <p style="margin:0;color:#4CAF50;">Correct answer: ${escapeQuizHtml(item.correctAnswer)}</p>
+        </div>`;
+    });
+    reviewHtml += `</div>`;
+  }
   resultContainer.innerHTML = `
     <h3>Your Score: ${correctAnswers} / ${quizQuestions.length}</h3>
     <p style="color:#888; font-family:'Source Sans Pro',sans-serif;">
@@ -269,6 +292,7 @@ function showResults() {
         ? 'Great effort!' 
         : 'Keep practising!'}
     </p>
+    ${reviewHtml}
     <button onclick="restartQuiz()" style="
       margin-top:10px;
       padding:10px 24px;
@@ -333,4 +357,9 @@ function checkFormation(btn, isCorrect) {
       }
     });
   }
+}
+
+// Stop quiz text injecting HTML
+function escapeQuizHtml(text) {
+  return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }

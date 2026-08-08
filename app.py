@@ -1,3 +1,5 @@
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
@@ -26,6 +28,20 @@ login_manager.login_view = 'home'
 # The token is rendered into the page via csrf_token() and sent
 # back by the frontend in the X-CSRFToken header on each POST.
 csrf = CSRFProtect(app)
+
+# Rate limiting. Tracks requests per client IP. No global limits are set,
+# so only routes with a @limiter.limit(...) decorator are throttled.
+# (Uses in-memory storage — fine for this project; a production app would
+# point storage_uri at Redis.)
+limiter = Limiter(get_remote_address, app=app)
+
+# When a rate limit is exceeded Flask-Limiter returns HTTP 429. This
+# handler returns it in the shape footy.js expects so the message shows
+# up as a normal chat reply rather than a broken response.
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return jsonify({"content": [{"type": "text",
+        "text": "Whoa, slow down! You've sent too many messages — please wait a minute and try again."}]}), 429
 
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
 
@@ -162,12 +178,24 @@ def save_score():
 @login_required
 def my_scores():
     conn = get_db()
-    scores = conn.execute(
+    rows = conn.execute(
         'SELECT score, total, taken_at FROM quiz_scores WHERE user_id = ? ORDER BY taken_at DESC',
         (current_user.id,)
     ).fetchall()
+    best = conn.execute(
+        'SELECT MAX(score) AS best FROM quiz_scores WHERE user_id = ?',
+        (current_user.id,)
+    ).fetchone()
     conn.close()
-    return jsonify({'scores': [dict(s) for s in scores]})
+    return jsonify({
+        'best_score': best['best'] if best['best'] is not None else 0,
+        'scores': [
+            {'score': r['score'], 'total': r['total'],
+             'percentage': round((r['score'] / r['total']) * 100) if r['total'] else 0,
+             'taken_at': r['taken_at']}
+            for r in rows
+        ]
+    })
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -184,6 +212,7 @@ def leaderboard():
     return jsonify({'leaderboard': [dict(r) for r in rows]})
 
 @app.route('/chat', methods=['POST'])
+@limiter.limit("10 per minute")
 def chat():
     data = request.get_json()
 
@@ -215,13 +244,14 @@ You ONLY answer questions about football. If asked about anything else, politely
         with urllib.request.urlopen(req) as resp:
             result_data = json.loads(resp.read())
         text = result_data["choices"][0]["message"]["content"]
-        result = {
-            "content": [{
-                "type": "text",
-                "text": text
-            }]
-        }
-        return jsonify(result)
+
+        # Lightweight response validation: guard against an empty reply
+        # and cap the length so one response can't flood the chat window.
+        if not text or not text.strip():
+            text = "Sorry, I couldn't answer that — try asking me something about football!"
+        text = text[:2000]
+
+        return jsonify({"content": [{"type": "text", "text": text}]})
     except Exception as e:
         print("CHAT ERROR:", str(e))
         return jsonify({"error": str(e)}), 500

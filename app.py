@@ -10,6 +10,7 @@ import sqlite3
 import os
 import urllib.request
 import json
+from models import bcrypt, init_db, User, QuizScore
 
 load_dotenv()
 
@@ -20,7 +21,7 @@ app.config['BCRYPT_LOG_ROUNDS'] = 12
 # User sessions expire after 30 minutes of inactivity
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-bcrypt = Bcrypt(app)
+bcrypt.init_app(app)   # bcrypt now comes from models.py
 login_manager = LoginManager(app)
 login_manager.login_view = 'home'
 
@@ -55,51 +56,9 @@ def set_security_headers(response):
     return response
 
 
-# ── DATABASE ──────────────────────────────────────────────────────
-def get_db():
-    conn = sqlite3.connect('footy.db', timeout=10)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-def init_db():
-    conn = get_db()
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS quiz_scores (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            score INTEGER NOT NULL,
-            total INTEGER NOT NULL,
-            taken_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-# ── USER MODEL ────────────────────────────────────────────────────
-class User(UserMixin):
-    def __init__(self, id, username, email):
-        self.id = id
-        self.username = username
-        self.email = email
-
 @login_manager.user_loader
 def load_user(user_id):
-    conn = get_db()
-    user = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-    conn.close()
-    if user:
-        return User(user['id'], user['username'], user['email'])
-    return None
+    return User.get(user_id)
 
 # ── ROUTES ────────────────────────────────────────────────────────
 @app.route('/')
@@ -109,24 +68,10 @@ def home():
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    username = data.get('username', '').strip()
-    email = data.get('email', '').strip()
-    password = data.get('password', '').strip()
-
-    if not username or not email or not password:
-        return jsonify({'success': False, 'message': 'All fields are required.'})
-
-    password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-
-    try:
-        conn = get_db()
-        conn.execute('INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)',
-                     (username, email, password_hash))
-        conn.commit()
-        conn.close()
-        return jsonify({'success': True, 'message': 'Account created! You can now log in.'})
-    except sqlite3.IntegrityError:
-        return jsonify({'success': False, 'message': 'Username or email already exists.'})
+    success, message = User.register(
+        data.get('username'), data.get('email'), data.get('password')
+    )
+    return jsonify({'success': success, 'message': message})
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -134,15 +79,11 @@ def login():
     username = data.get('username', '').strip()
     password = data.get('password', '').strip()
 
-    conn = get_db()
-    user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
-    conn.close()
-
-    if user and bcrypt.check_password_hash(user['password_hash'], password):
-        user_obj = User(user['id'], user['username'], user['email'])
+    user = User.get_by_username(username)
+    if user and user.verify_password(password):
         session.permanent = True
-        login_user(user_obj)
-        return jsonify({'success': True, 'username': user['username']})
+        login_user(user)
+        return jsonify({'success': True, 'username': user.username})
 
     return jsonify({'success': False, 'message': 'Incorrect username or password.'})
 
@@ -156,68 +97,48 @@ def logout():
 @login_required
 def save_score():
     data = request.get_json()
-    score = data.get('score')
-    total = data.get('total')
-
-    # Server-side validation, reject impossible scores
-    if not isinstance(score, int) or not isinstance(total, int):
-        return jsonify({'success': False, 'message': 'Invalid score data.'}), 400
-    if score < 0 or score > total or total > 10:
-        return jsonify({'success': False, 'message': 'Score out of valid range.'}), 400
-
-    conn = get_db()
-    try:
-        conn.execute('INSERT INTO quiz_scores (user_id, score, total) VALUES (?, ?, ?)',
-                     (current_user.id, score, total))
-        conn.commit()
-    finally:
-        conn.close()
+    attempt = QuizScore(current_user.id, data.get('score'), data.get('total'))
+    if not attempt.save():
+        return jsonify({'success': False, 'message': 'Invalid or out-of-range score.'}), 400
     return jsonify({'success': True})
 
 @app.route('/my_scores')
 @login_required
 def my_scores():
-    conn = get_db()
-    rows = conn.execute(
-        'SELECT score, total, taken_at FROM quiz_scores WHERE user_id = ? ORDER BY taken_at DESC',
-        (current_user.id,)
-    ).fetchall()
-    best = conn.execute(
-        'SELECT MAX(score) AS best FROM quiz_scores WHERE user_id = ?',
-        (current_user.id,)
-    ).fetchone()
-    conn.close()
+    scores = current_user.get_scores()
     return jsonify({
-        'best_score': best['best'] if best['best'] is not None else 0,
+        'best_score': current_user.get_best_score(),
         'scores': [
-            {'score': r['score'], 'total': r['total'],
-             'percentage': round((r['score'] / r['total']) * 100) if r['total'] else 0,
-             'taken_at': r['taken_at']}
-            for r in rows
+            {'score': s.score, 'total': s.total,
+             'percentage': s.calculate_percentage(), 'taken_at': s.taken_at}
+            for s in scores
         ]
     })
 
 @app.route('/leaderboard')
 def leaderboard():
-    conn = get_db()
-    rows = conn.execute('''
-        SELECT u.username, MAX(q.score) as best_score
-        FROM quiz_scores q
-        JOIN users u ON u.id = q.user_id
-        GROUP BY q.user_id
-        ORDER BY best_score DESC
-        LIMIT 10
-    ''').fetchall()
-    conn.close()
-    return jsonify({'leaderboard': [dict(r) for r in rows]})
+    return jsonify({'leaderboard': QuizScore.leaderboard(10)})
 
 @app.route('/chat', methods=['POST'])
 @limiter.limit("10 per minute")
 def chat():
     data = request.get_json()
+    
+    
+# ── SYSTEM PROMPT ─────────────────────────────────────────────
+# This is the instruction we send to the AI before every conversation.
+# It tells the AI who it is and what it is allowed to talk about.
+# This is your "prompt injection defence" the AI is told to ignore
+# any attempt to make it talk about non-football topics.
 
-    FOOTY_SYSTEM_PROMPT = """You are Footy, a friendly and knowledgeable football guide on A Girl's Guide to Football.
-You ONLY answer questions about football. If asked about anything else, politely decline and redirect to football topics."""
+
+    FOOTY_SYSTEM_PROMPT = """You are Footy, a friendly and knowledgeable football (soccer) guide on a website called "A Girl's Guide to Football", designed to help girls and young women learn about football.
+
+You ONLY answer questions about football (soccer). This includes: rules, player positions, leagues, clubs, famous players, tactics, formations, football history, transfers, and tournaments such as the World Cup, Champions League, and Premier League.
+
+If the user asks about ANYTHING not related to football, politely decline and redirect them back to football. Do not answer questions about other sports, general knowledge, personal advice, technology, politics, or any non-football topic.
+
+Keep your answers friendly, clear, encouraging and accessible. Your audience may be new to football so use simple language and briefly explain football terms when you use them."""
 
     messages = data.get('messages', [])
 
@@ -266,4 +187,4 @@ def current_user_info():
 if __name__ == '__main__':
     init_db()
     print('Footy app running at http://localhost:5000')
-    app.run(debug=True)
+    app.run(debug=False)

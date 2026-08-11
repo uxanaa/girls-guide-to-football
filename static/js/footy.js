@@ -5,22 +5,9 @@
 // In the final Flask implementation, the fetch call moves to a
 // server-side /chat route so the API key never reaches the browser.
 
-// ── 1. SYSTEM PROMPT ─────────────────────────────────────────────
-// This is the instruction we send to the AI before every conversation.
-// It tells the AI who it is and what it is allowed to talk about.
-// This is your "prompt injection defence" the AI is told to ignore
-// any attempt to make it talk about non-football topics.
-
-const FOOTY_SYSTEM_PROMPT = `You are Footy, a friendly and knowledgeable football (soccer) guide on a website called "A Girl's Guide to Football", designed to help girls and young women learn about football.
-
-You ONLY answer questions about football (soccer). This includes: rules, player positions, leagues, clubs, famous players, tactics, formations, football history, transfers, and tournaments such as the World Cup, Champions League, and Premier League.
-
-If the user asks about ANYTHING not related to football, politely decline and redirect them back to football. Do not answer questions about other sports, general knowledge, personal advice, technology, politics, or any non-football topic.
-
-Keep your answers friendly, clear, encouraging and accessible. Your audience may be new to football so use simple language and briefly explain football terms when you use them.`;
 
 
-// ── 2. CONVERSATION HISTORY ───────────────────────────────────────
+// ── 1. CONVERSATION HISTORY ───────────────────────────────────────
 // We store the full conversation so Footy remembers earlier messages.
 // Each message is an object with a role ("user" or "assistant")
 // and the content (what was said).
@@ -29,7 +16,7 @@ Keep your answers friendly, clear, encouraging and accessible. Your audience may
 let footyHistory = [];
 
 
-// ── 3. SEND MESSAGE ───────────────────────────────────────────────
+// ── 2. SEND MESSAGE ───────────────────────────────────────────────
 // This runs when the user clicks Send or presses Enter.
 // It:
 //   a) reads what the user typed
@@ -68,8 +55,7 @@ async function sendFootyMessage() {
         'X-CSRFToken': getCsrfToken()
       },
       body: JSON.stringify({
-        messages: footyHistory,
-        system: FOOTY_SYSTEM_PROMPT
+        messages: footyHistory
       })
     });
 
@@ -97,7 +83,7 @@ async function sendFootyMessage() {
 }
 
 
-// ── 4. DISPLAY A MESSAGE ──────────────────────────────────────────
+// ── 3. DISPLAY A MESSAGE ──────────────────────────────────────────
 // This adds a message bubble to the chat window.
 // sender is either 'user' (pink, right side) or 'bot' (light pink, left side)
 
@@ -120,7 +106,7 @@ function appendFootyMessage(text, sender) {
 }
 
 
-// ── 5. TYPING ANIMATION ───────────────────────────────────────────
+// ── 4. TYPING ANIMATION ───────────────────────────────────────────
 // Shows three bouncing dots while waiting for Footy's reply.
 // Returns an id so we can remove it once the reply arrives.
 
@@ -144,7 +130,7 @@ function removeFootyTyping(id) {
 }
 
 
-// ── 6. SECURITY: ESCAPE HTML ──────────────────────────────────────
+// ── 5. SECURITY: ESCAPE HTML ──────────────────────────────────────
 // This prevents XSS (cross-site scripting) attacks.
 // If the AI or a user types something like <script>alert('hack')</script>
 // this function converts the < and > into harmless text so it

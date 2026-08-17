@@ -1,12 +1,10 @@
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask import Flask, render_template, request, redirect, session, jsonify
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from datetime import timedelta
 from dotenv import load_dotenv
-import sqlite3
 import os
 import urllib.request
 import json

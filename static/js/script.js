@@ -100,7 +100,7 @@ const quizData = [
     correct: 1
   },
   {
-    question: "In which country is the English Premier League played?",
+    question: "In which country is the Premier League played?",
     options: ["England", "Spain", "Italy", "Germany"],
     correct: 0
   },

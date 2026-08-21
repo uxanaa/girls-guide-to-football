@@ -1,10 +1,13 @@
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask import Flask, render_template, request, redirect, session, jsonify
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
+from werkzeug.serving import WSGIRequestHandler
 from datetime import timedelta
 from dotenv import load_dotenv
+import sqlite3
 import os
 import urllib.request
 import json
@@ -18,6 +21,15 @@ app.config['BCRYPT_LOG_ROUNDS'] = 12
 
 # User sessions expire after 30 minutes of inactivity
 app.permanent_session_lifetime = timedelta(minutes=30)
+
+# Session-cookie hardening (addresses ZAP "Cookie without SameSite Attribute").
+# HttpOnly stops client-side JavaScript from reading the cookie; SameSite=Lax
+# stops it being sent on cross-site requests (defence-in-depth alongside CSRF).
+# Secure means "only send over HTTPS" — kept False for the local HTTP demo and
+# set to True in production via the COOKIE_SECURE environment variable.
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('COOKIE_SECURE', 'False') == 'True'
 
 bcrypt.init_app(app)   # bcrypt now comes from models.py
 login_manager = LoginManager(app)
@@ -51,6 +63,20 @@ def set_security_headers(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['X-XSS-Protection'] = '1; mode=block'
+    # Content Security Policy (addresses ZAP "CSP Header Not Set").
+    # Restricts where the page may load resources from. 'unsafe-inline' is
+    # required because the front end uses inline scripts, onclick handlers and
+    # inline styles; Google Fonts is allowed explicitly. Removing 'unsafe-inline'
+    # by refactoring inline code to use nonces/hashes is noted as future work.
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data:; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'"
+    )
     return response
 
 
@@ -183,6 +209,11 @@ def current_user_info():
     return jsonify({'logged_in': False})
 
 if __name__ == '__main__':
+    # Suppress the framework/version in the "Server" response header so it no
+    # longer leaks "Werkzeug/x.y Python/x.y" (addresses ZAP "Server Leaks
+    # Version Information"). In production a reverse proxy would strip this too.
+    WSGIRequestHandler.server_version = 'GGTF'
+    WSGIRequestHandler.sys_version = ''
     init_db()
     print('Footy app running at http://localhost:5000')
     app.run(debug=False)

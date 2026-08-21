@@ -165,7 +165,10 @@ function submitRegister() {
   // Send the registration data to the Flask /register route
   fetch('/register', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCsrfToken()
+    },
     body: JSON.stringify({ username, email, password })
   })
   .then(r => r.json()) // parse Flask's response

@@ -10,9 +10,26 @@ header {
 }
 
 .glitter {
-	background: url("https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHFlMXQ1ZGxrbTdoZzJ4bWhsNm4xaHg2ejllbXV6a25uZ3VybG10dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KH4QT4rqnnka04884l/giphy.webp");
-   -webkit-background-clip: text;
+	background: linear-gradient(
+		92deg,
+		#EB178F 0%,
+		#ff8ac9 20%,
+		#ffd1ec 40%,
+		#EB178F 55%,
+		#ffe08a 70%,
+		#ff8ac9 85%,
+		#EB178F 100%
+	);
+	background-size: 200% auto;
+	-webkit-background-clip: text;
+	background-clip: text;
 	-webkit-text-fill-color: transparent;
+	color: transparent;
+	animation: glitterShine 9s linear infinite;
+}
+
+@keyframes glitterShine {
+	to { background-position: 200% center; }
 }
 
 .container {

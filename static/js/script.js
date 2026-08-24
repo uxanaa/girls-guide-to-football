@@ -42,24 +42,23 @@ tabs.forEach(tab => {
   })
 })
 
-                  // Example player positions (you can adjust coordinates as per your image)
-                  const players = [
-                    { name: "Player 1", position: "GoalKeeper", x: 574, y: 160, info: "Role: Protect the goal and prevents the opposing team from scoring." },
-                    { name: "Player 2", position: "Right Back", x: 435, y: 30, info: "" },
-                    { name: "Player 3", position: "Left Back", x: 435, y: 265, info: "" },
-                    { name: "Player 4", position: "Centre Back(cb)", x: 467, y: 204, info: "Role: Mark opposition attackers and move the ball away from danger." },
-                    { name: "Player 5", position: "Centre Back(cb)", x: 467, y: 102, info: "Role: Mark opposition attackers and move the ball away from danger." },
-                    { name: "Player 6", position: "Defensive Midfielder", x: 380, y: 114, info: "Role: Stop the opposition from scoring and help the team build play from the back." },
-                    { name: "Player 7", position: "Left Wing", x: 231, y: 243, info: "" },
-                    { name: "Player 8", position: "Central Midfielder", x: 359, y: 192, info: "" },
-                    { name: "Player 9", position: "Striker", x: 175, y: 147, info: "" },
-                    { name: "Player 10", position: "Attacking Midfielder", x: 279, y: 149, info: "" },
-                    { name: "Player 11", position: "Right Wing", x: 230, y: 46, info: "" },
-                ];
-         
-                const field = document.getElementById('field');
-const infoPopup = document.getElementById('infoPopup');
-const image = field.querySelector('img'); // Select the image within the field
+    // Example player positions (you can adjust coordinates as per your image)
+    const players = [
+    { name: "Player 1", position: "Goalkeeper", x: 574, y: 160, info: "Role: Protect the goal and prevent the opposing team from scoring." },
+    { name: "Player 2", position: "Right Back", x: 435, y: 30, info: "Role: Defend the right side and support attacks down the wing." },
+    { name: "Player 3", position: "Left Back", x: 435, y: 265, info: "Role: Defend the left side and support attacks down the wing." },
+    { name: "Player 4", position: "Centre Back (CB)", x: 467, y: 204, info: "Role: Mark opposition attackers and move the ball away from danger." },
+    { name: "Player 5", position: "Centre Back (CB)", x: 467, y: 102, info: "Role: Mark opposition attackers and move the ball away from danger." },
+    { name: "Player 6", position: "Defensive Midfielder", x: 380, y: 114, info: "Role: Stop the opposition from scoring and help the team build play from the back." },
+    { name: "Player 7", position: "Left Wing", x: 231, y: 243, info: "Role: Attack down the left, beat defenders and create chances or score." },
+    { name: "Player 8", position: "Central Midfielder", x: 359, y: 192, info: "Role: Link defence and attack, control the tempo and support both ends of the pitch." },
+    { name: "Player 9", position: "Striker", x: 175, y: 147, info: "Role: Lead the attack and score goals." },
+    { name: "Player 10", position: "Attacking Midfielder", x: 279, y: 149, info: "Role: Create scoring chances and support the striker in attack." },
+    { name: "Player 11", position: "Right Wing", x: 230, y: 46, info: "Role: Attack down the right, beat defenders and create chances or score." },
+    ];
+    const field = document.getElementById('field');
+    const infoPopup = document.getElementById('infoPopup');
+    const image = field.querySelector('img'); // Select the image within the field
 
 // Event listener to detect clicks on the football field
 field.addEventListener('click', function (e) {

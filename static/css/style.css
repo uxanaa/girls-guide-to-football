@@ -266,3 +266,777 @@ li {
 .active[data-tab-info] {
   display: block;
 }
+
+
+
+/* ============================================================
+   WOMEN'S FOOTBALL SECTION
+   ============================================================ */
+
+.women-header {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.women-header h1 {
+  color: #EB178F;
+  margin-bottom: 10px;
+}
+
+.women-header p {
+  max-width: 750px;
+  margin: 8px auto;
+}
+
+.women-updated {
+  font-size: 13px;
+  color: #888;
+  font-style: italic;
+}
+
+
+/* ------------------------------------------------------------
+   SECTION NAVIGATION
+   ------------------------------------------------------------ */
+
+.women-section-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px auto;
+  padding: 0 10px;
+}
+
+.women-section-btn {
+  padding: 12px 20px;
+  border: 2px solid #EB178F;
+  border-radius: 10px;
+  background: white;
+  color: #EB178F;
+  font-family: 'Lora', serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.women-section-btn:hover {
+  background: #fce8f3;
+  transform: translateY(-2px);
+}
+
+.women-section-btn.active {
+  background: #EB178F;
+  color: white;
+}
+
+
+/* ------------------------------------------------------------
+   SECTIONS
+   ------------------------------------------------------------ */
+
+.women-section {
+  display: none;
+  padding: 10px 15px 30px;
+}
+
+.women-section.active {
+  display: block;
+}
+
+.women-intro {
+  max-width: 750px;
+  margin: 0 auto 20px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+
+/* ------------------------------------------------------------
+   COUNTRY FILTERS
+   ------------------------------------------------------------ */
+
+.women-filter-container,
+.records-filter-container,
+.profile-filter-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px auto;
+}
+
+.women-filter,
+.record-filter,
+.profile-filter {
+  padding: 9px 15px;
+  border: 1px solid #EB178F;
+  border-radius: 20px;
+  background: white;
+  color: #EB178F;
+  font-family: 'Lora', serif;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.women-filter:hover,
+.record-filter:hover,
+.profile-filter:hover {
+  background: #fce8f3;
+}
+
+.women-filter.active,
+.record-filter.active,
+.profile-filter.active {
+  background: #EB178F;
+  color: white;
+}
+
+
+/* ------------------------------------------------------------
+   COUNTRY CARDS
+   ------------------------------------------------------------ */
+
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 25px auto;
+}
+
+.country-card {
+  background: white;
+  border: 1px solid #efc4dc;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.country-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(235, 23, 143, 0.15);
+}
+
+.country-flag {
+  font-size: 42px;
+  text-align: center;
+}
+
+.country-card h3 {
+  color: #EB178F;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.country-card h4 {
+  margin-bottom: 4px;
+  color: #555;
+}
+
+.country-card p {
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+.country-fact {
+  background: #fff3f9;
+  border-left: 4px solid #EB178F;
+  padding: 10px;
+  margin-top: 15px;
+  border-radius: 5px;
+}
+
+
+/* ------------------------------------------------------------
+   RECORD CARDS
+   ------------------------------------------------------------ */
+
+.records-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 25px auto;
+}
+
+.record-card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid #efc4dc;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.record-card::before {
+  content: "";
+  display: block;
+  height: 5px;
+  background: #EB178F;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.record-icon {
+  font-size: 32px;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.record-number {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 34px;
+  color: #EB178F;
+  text-align: center;
+  font-weight: 900;
+  margin: 10px 0;
+}
+
+.record-card h3 {
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  font-size: 17px;
+}
+
+.record-holder {
+  text-align: center;
+  font-family: 'Lora', serif;
+  font-weight: bold;
+  color: #EB178F;
+}
+
+.record-card p {
+  text-align: center;
+  line-height: 1.5;
+}
+
+
+/* ------------------------------------------------------------
+   PROFILE SEARCH
+   ------------------------------------------------------------ */
+
+.profile-search-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.profile-search {
+  width: min(600px, 90%);
+  padding: 13px 18px;
+  border: 2px solid #EB178F;
+  border-radius: 25px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.profile-search:focus {
+  box-shadow: 0 0 0 3px #f8c9e1;
+}
+
+
+/* ------------------------------------------------------------
+   PLAYER / TEAM CARDS
+   ------------------------------------------------------------ */
+
+.profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 25px auto;
+}
+
+.profile-card {
+  background: white;
+  border: 1px solid #efc4dc;
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+}
+
+.profile-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.profile-card h3 {
+  color: #EB178F;
+  font-size: 19px;
+  text-decoration: none;
+  margin: 8px 0;
+}
+
+.profile-type {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 15px;
+  background: #fce8f3;
+  color: #EB178F;
+  font-size: 12px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.profile-card p {
+  line-height: 1.5;
+}
+
+
+/* ------------------------------------------------------------
+   PROFILE MODAL
+   ------------------------------------------------------------ */
+
+.women-profile-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  overflow-y: auto;
+}
+
+.women-profile-modal.show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.women-profile-modal-content {
+  position: relative;
+  background: white;
+  width: min(700px, 95%);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  padding: 30px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.women-modal-close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  border: none;
+  background: none;
+  font-size: 32px;
+  color: #EB178F;
+  cursor: pointer;
+}
+
+.women-modal-icon {
+  text-align: center;
+  font-size: 60px;
+  margin-bottom: 5px;
+}
+
+.women-modal-title {
+  color: #EB178F;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 5px;
+}
+
+.women-modal-subtitle {
+  text-align: center;
+  color: #777;
+  font-family: 'Lora', serif;
+}
+
+.women-detail-box {
+  background: #fff3f9;
+  border-left: 4px solid #EB178F;
+  padding: 14px;
+  margin: 15px 0;
+  border-radius: 5px;
+}
+
+.women-detail-box strong {
+  color: #EB178F;
+}
+
+
+/* ------------------------------------------------------------
+   NO RESULTS
+   ------------------------------------------------------------ */
+
+.women-no-results {
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 30px;
+  color: #777;
+  font-family: 'Lora', serif;
+}
+
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 700px) {
+
+  .women-section-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .women-section-btn {
+    width: 100%;
+  }
+
+  .country-grid,
+  .records-grid,
+  .profiles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .women-filter-container,
+  .records-filter-container,
+  .profile-filter-container {
+    gap: 6px;
+  }
+
+  .women-filter,
+  .record-filter,
+  .profile-filter {
+    font-size: 13px;
+    padding: 8px 11px;
+  }
+
+  .women-profile-modal-content {
+    padding: 22px 16px;
+  }
+
+}
+
+<!-- 🔴 LIVERPOOL WOMEN -->
+<section id="liverpoolWomenSection" class="women-section">
+
+    <h2>🔴 Liverpool FC Women</h2>
+
+    <p class="women-intro">
+        Learn about the history, achievements and famous players
+        of Liverpool FC Women.
+    </p>
+
+    <!-- Liverpool introduction -->
+    <div class="liverpool-intro">
+
+        <div>
+            <h3>🔴 The Reds</h3>
+
+            <p>
+                Liverpool FC Women are the women's football team of
+                Liverpool Football Club.
+            </p>
+
+            <p>
+                The team was founded in 1989 as Newton LFC and became
+                officially part of the Liverpool FC brand in 1994.
+            </p>
+
+            <p>
+                Liverpool became one of the founding members of the
+                Women's Super League in 2011.
+            </p>
+        </div>
+
+        <div class="liverpool-badge">
+            🔴
+            <strong>LFC<br>WOMEN</strong>
+        </div>
+
+    </div>
+
+
+    <!-- 🏆 Trophies -->
+    <div class="liverpool-card">
+
+        <h3>🏆 Liverpool Women's Trophies</h3>
+
+        <div class="liverpool-trophies">
+
+            <div>
+                <span>🏆</span>
+                <h4>Women's Super League</h4>
+                <p>2013</p>
+            </div>
+
+            <div>
+                <span>🏆</span>
+                <h4>Women's Super League</h4>
+                <p>2014</p>
+            </div>
+
+            <div>
+                <span>🏆</span>
+                <h4>FA Women's Championship</h4>
+                <p>2021–22</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ⭐ Famous players -->
+    <div class="liverpool-card">
+
+        <h3>⭐ Liverpool Women Players to Know</h3>
+
+        <div class="liverpool-player-grid">
+
+
+            <!-- Natasha Dowie -->
+            <div class="lfc-player">
+
+                <img
+                    src="/static/images/natasha-dowie.jpg"
+                    alt="Natasha Dowie"
+                >
+
+                <h4>Natasha Dowie</h4>
+
+                <p class="lfc-position">
+                    ⚽ Forward
+                </p>
+
+                <p>
+                    Natasha Dowie was one of Liverpool's most important
+                    players during the club's WSL title-winning years.
+                    She scored 47 goals for Liverpool across two spells.
+                </p>
+
+            </div>
+
+
+            <!-- Gemma Bonner -->
+            <div class="lfc-player">
+
+                <img
+                    src="/static/images/gemma-bonner.jpg"
+                    alt="Gemma Bonner"
+                >
+
+                <h4>Gemma Bonner</h4>
+
+                <p class="lfc-position">
+                    🛡️ Defender
+                </p>
+
+                <p>
+                    Gemma Bonner captained Liverpool to back-to-back
+                    WSL titles in 2013 and 2014 and became the club's
+                    WSL-era appearance record holder.
+                </p>
+
+            </div>
+
+
+            <!-- Fara Williams -->
+            <div class="lfc-player">
+
+                <img
+                    src="/static/images/fara-williams.jpg"
+                    alt="Fara Williams"
+                >
+
+                <h4>Fara Williams</h4>
+
+                <p class="lfc-position">
+                    🎯 Midfielder
+                </p>
+
+                <p>
+                    Fara Williams was a hugely experienced England
+                    international and an important midfielder during
+                    Liverpool's successful WSL period.
+                </p>
+
+            </div>
+
+
+            <!-- Lucy Bronze -->
+            <div class="lfc-player">
+
+                <img
+                    src="/static/images/lucy-bronze.jpg"
+                    alt="Lucy Bronze"
+                >
+
+                <h4>Lucy Bronze</h4>
+
+                <p class="lfc-position">
+                    🛡️ Defender
+                </p>
+
+                <p>
+                    Lucy Bronze was part of Liverpool's 2013 WSL
+                    title-winning team before going on to become one
+                    of the world's best-known defenders.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 📖 Liverpool timeline -->
+    <div class="liverpool-card">
+
+        <h3>📖 Liverpool Women's History</h3>
+
+        <div class="lfc-timeline">
+
+            <div>
+                <strong>1989</strong>
+                <p>
+                    The team was founded as Newton LFC.
+                </p>
+            </div>
+
+            <div>
+                <strong>1994</strong>
+                <p>
+                    The team became officially part of the
+                    Liverpool FC brand.
+                </p>
+            </div>
+
+            <div>
+                <strong>2011</strong>
+                <p>
+                    Liverpool became a founding member of the
+                    Women's Super League.
+                </p>
+            </div>
+
+            <div>
+                <strong>2013</strong>
+                <p>
+                    Liverpool won their first Women's Super League
+                    title.
+                </p>
+            </div>
+
+            <div>
+                <strong>2014</strong>
+                <p>
+                    Liverpool retained the Women's Super League title.
+                </p>
+            </div>
+
+            <div>
+                <strong>2021–22</strong>
+                <p>
+                    Liverpool won the FA Women's Championship and
+                    returned to the Women's Super League.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 💡 Fun facts -->
+    <div class="liverpool-card">
+
+        <h3>💡 Liverpool Women Fun Facts</h3>
+
+        <ul class="lfc-facts">
+
+            <li>
+                🔴 Liverpool have won the Women's Super League twice.
+            </li>
+
+            <li>
+                🏆 The two WSL titles came in 2013 and 2014.
+            </li>
+
+            <li>
+                ⚽ Natasha Dowie is Liverpool Women's record
+                goalscorer with 47 goals.
+            </li>
+
+            <li>
+                🛡️ Gemma Bonner is Liverpool's WSL-era
+                appearance record holder with 186 appearances.
+            </li>
+
+            <li>
+                👩 In 2012, Liverpool became the first English club
+                to offer every female player full-time professional
+                contracts.
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ❤️ Why Liverpool matters -->
+    <div class="liverpool-message">
+
+        <h3>❤️ Why Liverpool Women Matter</h3>
+
+        <p>
+            Liverpool Women's story is an important part of the
+            growth of women's football in England.
+        </p>
+
+        <p>
+            From their early beginnings to becoming WSL champions,
+            Liverpool have helped show how women's football can grow,
+            develop and inspire the next generation of players.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+/* Keep profile cards tidy */
+.profile-card {
+    overflow: hidden;
+}
+
+/* FORCE WOMEN'S PLAYER PHOTOS TO STAY SMALL */
+#profilesGrid .profile-card img.profile-image {
+    width: 140px !important;
+    height: 140px !important;
+    max-width: 140px !important;
+    max-height: 140px !important;
+    min-width: 140px !important;
+    min-height: 140px !important;
+    object-fit: cover !important;
+    display: block !important;
+    margin: 15px auto !important;
+    border-radius: 10px !important;
+}

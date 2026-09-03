@@ -1,7 +1,7 @@
 // ── AUTH & LEADERBOARD ────────────────────────────────────────────
 // This file handles everything related to user authentication
 // (login, register, logout) and the leaderboard display.
-// It is separate from script.js to keep responsibilities clear —
+// It is separate from script.js to keep responsibilities clear
 // script.js handles tabs, pitch diagram and quiz,
 // auth.js handles user accounts and leaderboard.
 
@@ -154,7 +154,7 @@ function submitLogin() {
 // Runs when the user clicks Create Account.
 // Reads the username, email and password they typed,
 // sends them to Flask, and handles the response.
-// Flask hashes the password with bcrypt before storing it —
+// Flask hashes the password with bcrypt before storing it
 // the plain text password is never saved to the database.
 function submitRegister() {
   // Read values from the register form fields

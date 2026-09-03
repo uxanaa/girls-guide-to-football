@@ -24,12 +24,13 @@
 
     <!-- Tabs Detail -->
     <div class="tabs">
-      <span data-tab-value="#tab_1">Home</span>
-      <span data-tab-value="#tab_2">Positions</span>
-      <span data-tab-value="#tab_3">Rules</span>
-      <span data-tab-value="#tab_4">Leagues</span>
-      <span data-tab-value="#tab_5">Quiz</span>
-      <span data-tab-value="#tab_6">⚽ Footy</span>
+      <span data-tab-value="#tab_1">💗 Home</span>
+      <span data-tab-value="#tab_2">🧍‍♀️ Positions</span>
+      <span data-tab-value="#tab_3">📋 Rules</span>
+      <span data-tab-value="#tab_4">🏅 Leagues</span>
+      <span data-tab-value="#tab_9">🌍 Women's Football</span>
+      <span data-tab-value="#tab_5">🧠 Quiz</span>
+      <span data-tab-value="#tab_6">⚽ Footy AI</span>
       <span data-tab-value="#tab_7">🏆 Leaderboard</span>
       <span data-tab-value="#tab_8" id="dashboardTab" style="display:none;">📊 My Stats</span>
       <span class="tab-login" id="loginBtn" onclick="document.getElementById('loginModal').style.display='flex'">&#128100; Login</span>
@@ -598,6 +599,395 @@
       </div>
     </main>
   </div>
+
+  <!-- =========================================================
+    WOMEN'S FOOTBALL TAB
+    ========================================================= -->
+
+<div class="tabs__tab" id="tab_9" data-tab-info>
+
+    <div class="women-header">
+        <h1>🌍 Women's Football</h1>
+
+        <p>
+            Discover the world of women's football, learn about
+            famous players and teams, and explore some of the game's
+            biggest records.
+        </p>
+    </div>
+
+
+    <!-- =====================================================
+        SECTION NAVIGATION
+        ===================================================== -->
+<div class="women-section-buttons">
+
+    <button class="women-section-btn active" 
+            onclick="showWomenSection('worldSection', this)"> 
+        🌍 Around the World 
+    </button> 
+
+    <button class="women-section-btn" 
+            onclick="showWomenSection('recordsSection', this)"> 
+        🏆 Records 
+    </button> 
+
+    <button class="women-section-btn" 
+            onclick="showWomenSection('profilesSection', this)"> 
+        ⭐ Players & Teams 
+    </button>
+
+    <button class="women-section-btn" 
+            onclick="showWomenSection('liverpoolWomenSection', this)"> 
+        🔴 Liverpool Women 
+    </button>
+
+</div>
+
+
+    <!-- =====================================================
+        1. WOMEN'S FOOTBALL AROUND THE WORLD
+        ===================================================== -->
+
+    <section id="worldSection" class="women-section active">
+
+        <h2>🌍 Women's Football Around the World</h2>
+
+        <p class="women-intro">
+            Women's football is played across every continent.
+            Explore some of the countries and football cultures
+            that have helped shape the women's game.
+        </p>
+
+
+        <!-- Country filters -->
+
+        <div class="women-filter-container">
+
+            <button class="women-filter active"
+                    onclick="filterCountries('all', this)">
+                🌎 All
+            </button>
+
+            <button class="women-filter"
+                    onclick="filterCountries('Europe', this)">
+                🇪🇺 Europe
+            </button>
+
+            <button class="women-filter"
+                    onclick="filterCountries('Americas', this)">
+                🌎 Americas
+            </button>
+
+            <button class="women-filter"
+                    onclick="filterCountries('Oceania', this)">
+                🌊 Oceania
+            </button>
+
+            <button class="women-filter"
+                    onclick="filterCountries('Asia', this)">
+                🌏 Asia
+            </button>
+
+            <button class="women-filter"
+                    onclick="filterCountries('Africa', this)">
+                🌍 Africa
+            </button>
+
+        </div>
+
+
+        <div id="countryCards" class="country-grid"></div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         2. WOMEN'S FOOTBALL RECORDS
+         ===================================================== -->
+
+    <section id="recordsSection" class="women-section">
+
+        <h2>🏆 Women's Football Records</h2>
+
+        <p class="women-intro">
+            Football history is full of incredible achievements.
+            Here are some records and milestones from the women's game.
+        </p>
+
+
+        <div class="records-filter-container">
+
+            <button class="record-filter"
+                    onclick="filterRecords('international', this)">
+                🌍 International
+            </button>
+
+            <button class="record-filter"
+                    onclick="filterRecords('worldcup', this)">
+                🏆 World Cup
+            </button>
+
+            <button class="record-filter"
+                    onclick="filterRecords('club', this)">
+                🏟️ Club
+            </button>
+
+            <button class="record-filter"
+                    onclick="filterRecords('uwcl', this)">
+                ⭐ Champions League
+            </button>
+
+        </div>
+
+
+        <div id="recordsGrid" class="records-grid"></div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+        3. PLAYERS & TEAMS
+        ===================================================== -->
+
+    <section id="profilesSection" class="women-section">
+
+        <h2>⭐ Players & Teams</h2>
+
+        <p class="women-intro">
+            Get to know some of the players and clubs that have made
+            an impact on women's football.
+        </p>
+
+        <!-- Profile filters -->
+
+        <div class="profile-filter-container">
+
+            <button class="profile-filter"
+                    onclick="filterProfiles('player', this)">
+                👤 Players
+            </button>
+
+            <button class="profile-filter"
+                    onclick="filterProfiles('team', this)">
+                🏟️ Teams
+            </button>
+
+        </div>
+
+
+        <div id="profilesGrid" class="profiles-grid"></div>
+
+    </section>
+
+
+
+<!-- 🔴 LIVERPOOL WOMEN -->
+<section id="liverpoolWomenSection" class="women-section">
+
+    <h2>🔴 Liverpool FC Women</h2>
+
+    <p class="women-intro">
+        Learn about the history, achievements and famous players
+        of Liverpool FC Women.
+    </p>
+
+    <!-- Liverpool introduction -->
+    <div class="liverpool-intro">
+
+        <div>
+            <h3>🔴 The Reds</h3>
+
+            <p>
+                Liverpool FC Women are the women's football team of
+                Liverpool Football Club.
+            </p>
+
+            <p>
+                The team was founded in 1989 as Newton LFC and became
+                officially part of the Liverpool FC brand in 1994.
+            </p>
+
+            <p>
+                Liverpool became one of the founding members of the
+                Women's Super League in 2011.
+            </p>
+        </div>
+
+        <div class="liverpool-badge">
+            🔴
+            <strong>LFC WOMEN</strong>
+        </div>
+
+    </div>
+
+
+    <!-- 🏆 Trophies -->
+    <div class="liverpool-card">
+
+        <h3>🏆 Liverpool Women's Trophies</h3>
+
+        <div class="liverpool-trophies">
+
+            <div>
+                <span>🏆</span>
+                <h4>Women's Super League</h4>
+                <p>2013</p>
+            </div>
+
+            <div>
+                <span>🏆</span>
+                <h4>Women's Super League</h4>
+                <p>2014</p>
+            </div>
+
+            <div>
+                <span>🏆</span>
+                <h4>FA Women's Championship</h4>
+                <p>2021–22</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 📖 Liverpool timeline -->
+    <div class="liverpool-card">
+
+        <h3>📖 Liverpool Women's History</h3>
+
+        <div class="lfc-timeline">
+
+            <div>
+                <strong>1989</strong>
+                <p>
+                    The team was founded as Newton LFC.
+                </p>
+            </div>
+
+            <div>
+                <strong>1994</strong>
+                <p>
+                    The team became officially part of the
+                    Liverpool FC brand.
+                </p>
+            </div>
+
+            <div>
+                <strong>2011</strong>
+                <p>
+                    Liverpool became a founding member of the
+                    Women's Super League.
+                </p>
+            </div>
+
+            <div>
+                <strong>2013</strong>
+                <p>
+                    Liverpool won their first Women's Super League
+                    title.
+                </p>
+            </div>
+
+            <div>
+                <strong>2014</strong>
+                <p>
+                    Liverpool retained the Women's Super League title.
+                </p>
+            </div>
+
+            <div>
+                <strong>2021–22</strong>
+                <p>
+                    Liverpool won the FA Women's Championship and
+                    returned to the Women's Super League.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 💡 Fun facts -->
+    <div class="liverpool-card">
+
+        <h3>💡 Liverpool Women Fun Facts</h3>
+
+        <ul class="lfc-facts">
+
+            <li>
+                🔴 Liverpool have won the Women's Super League twice.
+            </li>
+
+            <li>
+                🏆 The two WSL titles came in 2013 and 2014.
+            </li>
+
+            <li>
+                ⚽ Natasha Dowie is Liverpool Women's record
+                goalscorer with 47 goals.
+            </li>
+
+            <li>
+                🛡️ Gemma Bonner is Liverpool's WSL-era
+                appearance record holder with 186 appearances.
+            </li>
+
+            <li>
+                👩 In 2012, Liverpool became the first English club
+                to offer every female player full-time professional
+                contracts.
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ❤️ Why Liverpool matters -->
+    <div class="liverpool-message">
+
+        <h3>❤️ Why Liverpool Women Matter</h3>
+
+        <p>
+            Liverpool Women's story is an important part of the
+            growth of women's football in England.
+        </p>
+
+        <p>
+            From their early beginnings to becoming WSL champions,
+            Liverpool have helped show how women's football can grow,
+            develop and inspire the next generation of players.
+        </p>
+
+    </div>
+
+</section>
+
+    <!-- =====================================================
+        PROFILE POPUP
+          -->
+
+    <div id="womenProfileModal" class="women-profile-modal">
+
+        <div class="women-profile-modal-content">
+
+            <button class="women-modal-close"
+                    onclick="closeWomenProfile()">
+                ×
+            </button>
+
+            <div id="womenProfileDetails"></div>
+
+        </div>
+
+    </div>
+
+</div>
 
     </div>
   </div>

@@ -66,7 +66,7 @@ def set_security_headers(response):
     # Content Security Policy (addresses ZAP "CSP Header Not Set").
     # Restricts where the page may load resources from. 'unsafe-inline' is
     # required because the front end uses inline scripts, onclick handlers and
-    # inline styles; Google Fonts is allowed explicitly. Removing 'unsafe-inline'
+    # inline styles, Google Fonts is allowed explicitly. Removing 'unsafe-inline'
     # by refactoring inline code to use nonces/hashes is noted as future work.
     response.headers['Content-Security-Policy'] = (
         "default-src 'self'; "
@@ -150,9 +150,9 @@ def chat():
     
     
 # ── SYSTEM PROMPT ─────────────────────────────────────────────
-# This is the instruction we send to the AI before every conversation.
+# This is the instruction sent to the AI before every conversation.
 # It tells the AI who it is and what it is allowed to talk about.
-# This is your "prompt injection defence" the AI is told to ignore
+# This is the "prompt injection defence" the AI is told to ignore
 # any attempt to make it talk about non-football topics.
 
 
@@ -167,7 +167,7 @@ Keep your answers friendly, clear, encouraging and accessible. Your audience may
     messages = data.get('messages', [])
 
     body = json.dumps({
-        "model": "google/gemma-4-26b-a4b-it:free",
+        "models": ["nvidia/nemotron-3.5-lightning:free", "thinkingmachines/inkling-small:free"],        
         "messages": [
             {"role": "system", "content": FOOTY_SYSTEM_PROMPT}
         ] + messages

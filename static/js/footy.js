@@ -135,7 +135,7 @@ function removeFootyTyping(id) {
 // If the AI or a user types something like <script>alert('hack')</script>
 // this function converts the < and > into harmless text so it
 // displays as text rather than running as code.
-// This maps directly to your OWASP Top 10 security requirements.
+// This maps directly to OWASP Top 10 security requirements.
 
 function escapeHtml(text) {
   return text

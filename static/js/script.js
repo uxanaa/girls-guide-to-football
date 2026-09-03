@@ -664,7 +664,7 @@ const womensFootballProfiles = [
     type: "player",
     name: "Aitana Bonmatí",
     icon: "⭐",
-    image: "/static/images/aitana-bonmati.webp",
+    image: "/static/images/aitana-bonmati.jpg",
     country: "Spain 🇪🇸",
     position: "Midfielder",
     era: "Barcelona / Spain",
@@ -698,7 +698,7 @@ const womensFootballProfiles = [
     type: "player",
     name: "Alessia Russo",
     icon: "⚽",
-    image: "/static/images/alessia-russo.webp",
+    image: "/static/images/alessia-russo.jpg",
     country: "England 🏴",
     position: "Forward",
     era: "Arsenal / England",
@@ -749,7 +749,7 @@ const womensFootballProfiles = [
     type: "player",
     name: "Temwa Chawinga",
     icon: "⚡",
-    image: "/static/images/temwa-chawinga.jpeg",
+    image: "/static/images/temwa-chawinga.jpg",
     country: "Malawi 🇲🇼",
     position: "Forward",
     era: "Kansas City Current / Malawi",
@@ -783,7 +783,7 @@ const womensFootballProfiles = [
     type: "player",
     name: "Ewa Pajor",
     icon: "⚽",
-    image: "/static/images/ewa-pajor.webp",
+    image: "/static/images/ewa-pajor.jpg",
     country: "Poland 🇵🇱",
     position: "Striker",
     era: "Barcelona / Poland",
@@ -800,7 +800,7 @@ const womensFootballProfiles = [
     type: "player",
     name: "Claudia Pina",
     icon: "⭐",
-    image: "/static/images/claudia-pina.png",
+    image: "/static/images/claudia-pina.jpg",
     country: "Spain 🇪🇸",
     position: "Forward",
     era: "Barcelona / Spain",
@@ -817,7 +817,7 @@ const womensFootballProfiles = [
     type: "player",
     name: "Leah Williamson",
     icon: "🛡️",
-    image: "/static/images/leah-williamson.avif",
+    image: "/static/images/leah-williamson.jpg",
     country: "England 🏴",
     position: "Centre-back",
     era: "Arsenal / England",
@@ -827,7 +827,7 @@ const womensFootballProfiles = [
       "England captain",
       "FA Women's Cup winner"
     ],
-    fact: "Williamson captained England to victory at UEFA Women's Euro 2022."
+    fact: "Williamson captained England to the UEFA Women's Euro 2022 title and again captained the Lionesses to victory at Euro 2025."
   },
 
   {

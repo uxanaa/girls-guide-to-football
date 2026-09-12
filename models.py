@@ -20,7 +20,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
 import sqlite3
 
-# Unbound bcrypt — app.py calls bcrypt.init_app(app) so the configured
+# Unbound bcrypt, app.py calls bcrypt.init_app(app) so the configured
 # work factor (BCRYPT_LOG_ROUNDS = 12, set in app.py) is applied.
 bcrypt = Bcrypt()
 
@@ -58,6 +58,16 @@ def init_db():
             score INTEGER NOT NULL,
             total INTEGER NOT NULL,
             taken_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS chat_messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            username TEXT NOT NULL,
+            message TEXT NOT NULL,
+            sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     ''')
@@ -239,3 +249,71 @@ class QuizScore:
         ''', (limit,)).fetchall()
         conn.close()
         return [dict(r) for r in rows]
+
+
+# ── CHAT MESSAGE ──────────────────────────────────────────────────
+class ChatMessage:
+    """A single message in the shared community chat room.
+
+    Follows the same object-oriented pattern as User and QuizScore:
+    all data logic for chat lives here, so the route handlers in
+    app.py stay thin. A message belongs to one user (one-to-many:
+    one User has many ChatMessages), linked by user_id.
+
+    Security note: message content is validated here (non-empty,
+    length-capped) before it is stored, so the server never trusts
+    the raw client input. Output is HTML-escaped when displayed so a
+    message can never inject a running script (XSS defence)."""
+
+    MAX_LENGTH = 300  # a single message can't exceed this many characters
+
+    def __init__(self, user_id, username, message, id=None, sent_at=None):
+        self.id = id
+        self.user_id = user_id
+        self.username = username
+        self.message = message
+        self.sent_at = sent_at
+
+    def is_valid(self):
+        """Server-side check — reject empty or over-long messages.
+        The client could POST anything, so the value is never trusted:
+        it must be a non-empty string no longer than MAX_LENGTH."""
+        if not isinstance(self.message, str):
+            return False
+        text = self.message.strip()
+        return 0 < len(text) <= self.MAX_LENGTH
+
+    def save(self):
+        """Insert this message after validating it.
+        Returns True on success, False if the message was invalid.
+        The trimmed text is stored (leading/trailing spaces removed)."""
+        if not self.is_valid():
+            return False
+        conn = get_db()
+        try:
+            conn.execute(
+                'INSERT INTO chat_messages (user_id, username, message) '
+                'VALUES (?, ?, ?)',
+                (self.user_id, self.username, self.message.strip())
+            )
+            conn.commit()
+        finally:
+            conn.close()
+        return True
+
+    @classmethod
+    def get_recent(cls, limit=50):
+        """Return the most recent messages, oldest-first for display.
+        We fetch the newest `limit` rows, then reverse them so the chat
+        reads top-to-bottom in chronological order. Returns a list of
+        {username, message, sent_at} dicts. The '?' placeholder keeps
+        the query parameterised against SQL injection."""
+        conn = get_db()
+        rows = conn.execute(
+            'SELECT username, message, sent_at FROM chat_messages '
+            'ORDER BY sent_at DESC, id DESC LIMIT ?',
+            (limit,)
+        ).fetchall()
+        conn.close()
+        # rows are newest-first from the query; reverse for chat order
+        return [dict(r) for r in reversed(rows)]

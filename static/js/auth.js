@@ -68,6 +68,10 @@ function showLoggedIn(username) {
   document.getElementById('dashboardTab').style.display = 'inline-block'; // show tab 8
   const lp = document.getElementById('leaderboardPrompt');               // hide login in text on leaderboard
   if (lp) lp.style.display = 'none';
+  const cir = document.getElementById('chat-input-row');                 // show chat input when logged in
+  if (cir) cir.style.display = 'flex';
+  const clp = document.getElementById('chatLoginPrompt');                // hide chat login prompt
+  if (clp) clp.style.display = 'none';
 }
 
 
@@ -81,6 +85,10 @@ function showLoggedOut() {
   document.getElementById('dashboardTab').style.display = 'none';      // hide tab 8
   const lp = document.getElementById('leaderboardPrompt');            // show login in text on leaderboard
   if (lp) lp.style.display = 'none';
+  const cir = document.getElementById('chat-input-row');              // hide chat input when logged out
+  if (cir) cir.style.display = 'none';
+  const clp = document.getElementById('chatLoginPrompt');             // show chat login prompt
+  if (clp) clp.style.display = 'block';
 }
 
 
@@ -247,3 +255,85 @@ function loadLeaderboard() {
       container.innerHTML = html; // insert the table into the page
     });
 }
+
+// ── COMMUNITY CHAT ────────────────────────────────────────────────
+// Shared public chat room. Anyone can read; only logged-in users post.
+// Messages are escaped before display (XSS defence) and the send
+// request carries the CSRF token (same as login/register).
+
+// Escape user text so a message like "<script>" is shown as plain
+// text, never executed. This is output escaping — the primary XSS
+// defence — applied at the moment of display.
+function escapeChat(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Fetch recent messages from Flask and render them.
+function loadChat() {
+  fetch('/messages')
+    .then(r => r.json())
+    .then(data => {
+      const box = document.getElementById('chat-messages');
+      if (!box) return;
+      if (!data.messages || data.messages.length === 0) {
+        box.innerHTML = '<p style="text-align:center; color:#aaa;">Chat with other members about football! Please be kind and respectful.</p>';
+        return;
+      }
+      let html = '';
+      data.messages.forEach(m => {
+        const when = m.sent_at ? String(m.sent_at).split('.')[0].slice(5, 16) : '';
+        html += '<div style="margin-bottom:10px;">'
+            +  '<span style="font-weight:bold; color:#EB178F;">' + escapeChat(m.username) + '</span> '
+            +  '<span style="font-size:11px; color:#aaa;">' + escapeChat(when) + '</span><br>'
+            +  '<span style="color:#333;">' + escapeChat(m.message) + '</span>'
+            +  '</div>';
+      });
+      box.innerHTML = html;
+      box.scrollTop = box.scrollHeight; // scroll to newest
+    })
+    .catch(() => {});
+}
+
+// Send a message. Requires login; carries the CSRF token.
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  if (!input) return;
+  const message = input.value.trim();
+  if (!message) return;
+
+  fetch('/send_message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCsrfToken()
+    },
+    body: JSON.stringify({ message })
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        input.value = '';
+        loadChat(); // refresh immediately so the user sees their message
+      } else {
+        alert(data.message || 'Could not send message.');
+      }
+    })
+    .catch(() => {});
+}
+
+// Send on Enter key as well as the button.
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('chatInput');
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); sendChatMessage(); }
+    });
+  }
+  loadChat();                 // load messages on page load
+  setInterval(loadChat, 5000); // poll for new messages every 5 seconds
+});

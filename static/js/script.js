@@ -928,9 +928,7 @@ function showWomenSection(sectionId, button) {
 }
 
 
-/* ============================================================
-   COUNTRY CARDS
-   ============================================================ */
+/* COUNTRY CARDS */
 
 function renderCountries(countryList) {
 

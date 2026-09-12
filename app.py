@@ -11,7 +11,7 @@ import sqlite3
 import os
 import urllib.request
 import json
-from models import bcrypt, init_db, User, QuizScore
+from models import bcrypt, init_db, User, QuizScore, ChatMessage
 
 load_dotenv()
 
@@ -134,7 +134,7 @@ def my_scores():
         'best_score': current_user.get_best_score(),
         'scores': [
             {'score': s.score, 'total': s.total,
-             'percentage': s.calculate_percentage(), 'taken_at': s.taken_at}
+            'percentage': s.calculate_percentage(), 'taken_at': s.taken_at}
             for s in scores
         ]
     })
@@ -201,6 +201,21 @@ Keep your answers friendly, clear, encouraging and accessible. Your audience may
         print("CHAT ERROR:", str(e))
         return jsonify({"error": str(e)}), 500
 
+
+@app.route('/send_message', methods=['POST'])
+@login_required
+@limiter.limit("20 per minute")
+def send_message():
+    data = request.get_json()
+    msg = ChatMessage(current_user.id, current_user.username, data.get('message', ''))
+    if not msg.save():
+        return jsonify({'success': False,
+                        'message': 'Message must be 1-300 characters.'}), 400
+    return jsonify({'success': True})
+
+@app.route('/messages')
+def messages():
+    return jsonify({'messages': ChatMessage.get_recent(50)})
 
 @app.route('/current_user_info')
 def current_user_info():

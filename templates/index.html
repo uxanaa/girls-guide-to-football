@@ -32,6 +32,7 @@
       <span data-tab-value="#tab_5">🧠 Quiz</span>
       <span data-tab-value="#tab_6">⚽ Footy AI</span>
       <span data-tab-value="#tab_7">🏆 Leaderboard</span>
+      <span data-tab-value="#tab_10">💬 Community Chat</span>
       <span data-tab-value="#tab_8" id="dashboardTab" style="display:none;">📊 My Stats</span>
       <span class="tab-login" id="loginBtn" onclick="document.getElementById('loginModal').style.display='flex'">&#128100; Login</span>
       <span class="tab-login" id="logoutBtn" style="display:none;" onclick="submitLogout()">&#128100; <span id="navUsername"></span> | Logout</span>
@@ -129,43 +130,69 @@
 
       <!-- Home -->
       <div class="tabs__tab active" id="tab_1" data-tab-info>
-        <main>
-          <h1>This website is designed to empower girls who are passionate to learn more about football.</h1>
-          <p style="text-align:center">
-            I will cover the basic rules and terminology to advanced tactics and formations, 
-            you’ll find easy to understand explanations that cater to both beginners 
-            and seasoned fans. I’ll dive into key aspects like player positions,
-            major competitions, iconic clubs, and legendary players, while also exploring 
-            fan culture, rivalries, and football traditions from around the world. You’ll 
-            learn about the history of the game, how transfers and scouting work, and even 
-            tips on how to get involved in playing or supporting football. Whether you’re 
-            curious about the Premier League, the FIFA World Cup, or just want to understand
-            what makes football so special, this site is your go-to resource for everything 
-            related to the beautiful game.
-          </p>
-          <h2> Introduction To Football</h2>
-          <p style="text-align:center">Football, known as soccer in some countries, is the world’s most popular sport, played and loved by millions across every continent. 
-            It is a simple yet exciting game played between two teams of 11 players each. 
-            The primary objective is to score more goals than the opposing team by getting the ball 
-            into their goal, primarily using their feet, heads, or bodies - except the goalkeeper, 
-            who can use their hands within the penalty area. The match is played on a rectangular field with a goal at each end, and 
-            the game lasts for 90 minutes, divided into two 45-minute halves. In the event of a tie, 
-            extra time or a penalty shootout may be used, depending on the competition.
-          <p>
-          <h3>Why learn about football?</h3>
-          <p style="text-align:center">
-            Understanding football allows you to appreciate the strategy, skills, and teamwork involved, 
-            transforming the way you watch and enjoy matches. It deepens your connection to the sport, 
-            enabling you to follow tactics, player movements, and key moments with a more analytical 
-            perspective. Whether you're playing casually with friends or pursuing it competitively, 
-            football is an excellent way to stay active and become part of a global 
-            community. 
-            The sport’s global appeal is undeniable, with massive tournaments like the FIFA 
-            (Fédération Internationale de Football Association) World Cup uniting billions of fans. 
-            It’s not just a game; it’s a universal language, a cultural phenomenon, and a source of 
-            unending passion and excitement.
-          </p>
-        </main>
+      <main>
+        <h1>Welcome to A Girl's Guide to Football ⚽</h1>
+        <p style="text-align:center">
+          Football is the biggest game on the planet, and this site is a friendly place to finally learn it 
+          properly. If you've always wanted to understand football but never knew where to start, this is where it all starts to make 
+          sense. Everything is broken down into simple sections and explained in plain English, so whether 
+          you're starting from zero or already shout at a team on weekends, you can learn at your own pace 
+          and actually enjoy it.
+        </p>
+
+        <h2>⚽ The questions everyone's too shy to ask</h2>
+        <p style="text-align:center">
+          Why was that a free kick? What does offside actually mean, and why does it start so many
+          arguments? What is a midfielder even doing out there? This is where you get the answers,
+          without ever feeling silly for asking. Click around the interactive pitch to see what each
+          position does, get your head around formations, and finally sort out the difference between
+          a league and a cup.
+        </p>
+
+        <h2>🌟 Why bother learning it?</h2>
+        <p style="text-align:center">
+          Because once it clicks, watching football gets so much better. Instead of just following
+          the ball, you start spotting the clever runs, the reason a team is suddenly on top, and the
+          little moments that quietly win games. You will also hold your own in any football chat,
+          whether that is with friends, family, or the group chat that won't stop arguing about the
+          weekend.
+        </p>
+
+        <h2>💪 The women's game takes centre stage</h2>
+        <p style="text-align:center">
+          Football has long been treated as a men's sport, but the women's game is one of the
+          fastest growing in the world, filling stadiums and creating new heroes every season. Here
+          it gets the spotlight it deserves. Meet the players and teams shaping the game right now,
+          from World Cup winners to record breakers, and get to know the leagues and legends behind
+          them. The aim is simple. Give girls the knowledge and confidence to jump in, ask questions,
+          back a team, and enjoy football on their own terms.
+        </p>
+
+        <h2>🎯 What's actually on here</h2>
+        <p style="text-align:center">
+          Everything is split into sections, so you can dip into whatever grabs you. Learn the rules,
+          explore positions and formations on the pitch, browse the leagues, and dive into the
+          women's football section. When you fancy a challenge, take the quiz, watch your best scores
+          climb the leaderboard, and see how you measure up.
+        </p>
+        <p style="text-align:center">
+          Stuck on something the site doesn't cover? Ask Footy, the built-in football guide, anything
+          you like. Then head to the community chat to talk football with everyone else learning
+          alongside you.
+        </p>
+
+        <h2>❤️ Kick things off</h2>
+        <p style="text-align:center">
+          Nobody is born knowing what a false nine is. Everyone who loves football started exactly
+          where you are now, so take your time and follow whatever interests you.
+        </p>
+        <p style="text-align:center">
+          <strong>
+            Whether you're here to survive your first match or become the most clued-up person in the
+            room, this is your guide to the beautiful game.
+          </strong>
+        </p>
+      </main>
           
       </div>
 
@@ -600,9 +627,36 @@
     </main>
   </div>
 
-  <!-- =========================================================
-    WOMEN'S FOOTBALL TAB
-    ========================================================= -->
+  <!-- Community Chat -->
+  <div class="tabs__tab" id="tab_10" data-tab-info>
+    <main>
+      <h1>💬 Community Chat</h1>
+      <p style="text-align:center; color:#888; font-family:'Source Sans Pro',sans-serif; max-width:560px; margin:0.5rem auto;">
+        Chat with other members about football! Be kind and respectful.
+      </p>
+      <p id="chatLoginPrompt" style="text-align:center; color:#EB178F; font-family:'Source Sans Pro',sans-serif;">
+        Please log in to join the conversation.
+      </p>
+
+      <div id="chat-container" style="max-width:560px; margin:0 auto; padding:1rem;">
+        <div id="chat-messages" style="height:340px; overflow-y:auto; border:1px solid #f0b8d8; border-radius:12px; padding:12px; background:#fff5fa; margin-bottom:12px;">
+          <p style="text-align:center; color:#aaa;">Loading messages...</p>
+        </div>
+
+        <div id="chat-input-row" style="display:none; gap:8px;">
+          <input type="text" id="chatInput" maxlength="300" placeholder="Type a message..."
+                 style="flex:1; padding:10px 12px; border:1px solid #f0b8d8; border-radius:20px; font-family:'Source Sans Pro',sans-serif; outline:none;">
+          <button onclick="sendChatMessage()"
+                  style="background:#EB178F; color:#fff; border:none; border-radius:20px; padding:10px 20px; cursor:pointer; font-weight:bold;">
+            Send
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+  <!-- WOMEN'S FOOTBALL TAB -->
 
 <div class="tabs__tab" id="tab_9" data-tab-info>
 
@@ -617,9 +671,7 @@
     </div>
 
 
-    <!-- =====================================================
-        SECTION NAVIGATION
-        ===================================================== -->
+    <!-- SECTION NAVIGATION -->
 <div class="women-section-buttons">
 
     <button class="women-section-btn active" 
@@ -645,9 +697,7 @@
 </div>
 
 
-    <!-- =====================================================
-        1. WOMEN'S FOOTBALL AROUND THE WORLD
-        ===================================================== -->
+    <!-- 1. WOMEN'S FOOTBALL AROUND THE WORLD -->
 
     <section id="worldSection" class="women-section active">
 
@@ -703,9 +753,7 @@
 
 
 
-    <!-- =====================================================
-         2. WOMEN'S FOOTBALL RECORDS
-         ===================================================== -->
+    <!-- 2. WOMEN'S FOOTBALL RECORDS -->
 
     <section id="recordsSection" class="women-section">
 
@@ -748,9 +796,7 @@
 
 
 
-    <!-- =====================================================
-        3. PLAYERS & TEAMS
-        ===================================================== -->
+    <!-- 3. PLAYERS & TEAMS -->
 
     <section id="profilesSection" class="women-section">
 
@@ -968,9 +1014,7 @@
 
 </section>
 
-    <!-- =====================================================
-        PROFILE POPUP
-          -->
+    <!-- PROFILE POPUP -->
 
     <div id="womenProfileModal" class="women-profile-modal">
 
@@ -999,8 +1043,8 @@
 
 <footer>
   <hr>
-   <h5>Author: Uxanaa Shashitharen</h5>
-   <h5>Inspired by Charley Rigg ⚽</h5>
+  <h5>Author: Uxanaa Shashitharen</h5>
+  <h5>Inspired by Charley Rigg ⚽</h5>
   <hr>
 </footer>
 

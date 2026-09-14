@@ -44,7 +44,7 @@ function loadDashboard() {
 // Sends a request to Flask asking "is anyone logged in right now?"
 // Flask checks the session cookie and replies with yes or no.
 // If yes, we update the nav bar to show the username instead of Login.
-// This is how the site remembers you between page refreshes.
+// This is how the site remembers user between page refreshes.
 function checkLoginStatus() {
   fetch('/current_user_info')       // calls the Flask route /current_user_info
     .then(r => r.json())            // converts the response to JSON
@@ -97,7 +97,6 @@ function closeModal() {
   document.getElementById('loginModal').style.display = 'none';
   document.getElementById('loginError').style.display = 'none';
   document.getElementById('registerMsg').style.display = 'none';
-  sessionStorage.setItem('activeTab', tab.dataset.tabValue);
 }
 
 
@@ -230,7 +229,7 @@ function loadLeaderboard() {
 
       if (data.leaderboard.length === 0) {
         // No scores yet — show a friendly message
-        container.innerHTML = '<p style="text-align:center; color:#aaa;">No scores yet — be the first!</p>';
+        container.innerHTML = '<p style="text-align:center; color:#aaa;">No scores yet, be the first!</p>';
         return;
       }
 

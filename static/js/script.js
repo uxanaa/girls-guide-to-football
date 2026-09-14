@@ -32,15 +32,29 @@ function getCsrfToken() {
 
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
-    const target = document
-      .querySelector(tab.dataset.tabValue);
+
+    const target = document.querySelector(tab.dataset.tabValue);
+
+    // Change page content
     tabInfos.forEach(tabInfo => {
-      tabInfo.classList.remove('active')
-    })
-    target.classList.add('active');
+      tabInfo.classList.remove('active');
+    });
+
+    if (target) {
+      target.classList.add('active');
+    }
+
+    // Change selected navigation tab
+    tabs.forEach(t => {
+      t.classList.remove('selected-tab');
+    });
+
+    tab.classList.add('selected-tab');
+
     sessionStorage.setItem('activeTab', tab.dataset.tabValue);
-  })
-})
+  });
+});
+
 
     // Example player positions
     const players = [

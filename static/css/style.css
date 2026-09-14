@@ -1,3 +1,20 @@
+.tabs > span {
+    cursor: pointer;
+    display: inline-block;
+    padding: 9px 13px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.tabs > span:hover {
+    color: #EB178F;
+}
+
+.tabs > span.selected-tab {
+    color: #EB178F;
+    font-weight: bold;
+    transform: translateY(-4px);
+}
+
 body {
   background-color: #f5e6ee;
 }
@@ -89,7 +106,7 @@ p{
 
 li {
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 15px;      /* Adjust this value so that it appears what size you want. */
+  font-size: 15px;
 }
 
 
@@ -112,16 +129,18 @@ li {
 .tabs {
   border-bottom: 1px solid grey;
   background-color: rgb(235, 23, 143);
-  font-size: 20px;
+  font-size: 15px;
   color: white;
   display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
   margin: 0;
-  border: 1px solid rgb(255, 255, 255);
 }
 .tabs span {
   background: rgb(235, 23, 143);
-  padding: 10px;
+  padding: 8px 10px;
   border: 1px solid rgb(255, 255, 255);
+  white-space: nowrap;
 }
 .tabs span:hover {
   background: rgb(235, 23, 143);

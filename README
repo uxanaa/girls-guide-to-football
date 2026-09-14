@@ -1,0 +1,130 @@
+# A Girl's Guide to Football
+
+A Girl's Guide to Football is an educational web application designed to help beginners learn about football through interactive explanations, quizzes, statistics, women's football information, community features, and an AI-powered football assistant.
+
+## Requirements
+
+Before running the application, make sure you have:
+
+* Python 3 installed
+* An OpenRouter API key
+* A Windows computer (the instructions below use Windows)
+
+---
+
+## 1. Open the project folder
+
+Open Command Prompt or PowerShell and navigate to the project directory:
+
+ 
+cd C:\Users\uxana\Desktop\footyproject
+ 
+
+---
+
+## 2. Create a virtual environment
+
+Create a Python virtual environment inside the project folder:
+
+ 
+python -m venv venv
+ 
+
+---
+
+## 3. Activate the virtual environment
+
+On Windows, activate the virtual environment using:
+
+ 
+venv\Scripts\activate
+ 
+
+After activation, the terminal should show `(venv)` at the beginning of the command line.
+
+---
+
+## 4. Install the required dependencies
+
+Install the Python packages required by the application:
+
+ 
+pip install flask flask-bcrypt flask-login flask-wtf flask-limiter python-dotenv
+ 
+
+If the project contains a `requirements.txt` file, the dependencies can instead be installed using:
+
+ 
+pip install -r requirements.txt
+ 
+
+---
+
+## 5. Set up the environment variables
+
+An `envexample` file is included in the project as a template for the required environment variables.
+
+Make a copy of `envexample` and rename the copy to:
+
+.env
+
+Then open the `.env` file and add your own values:
+
+OPENROUTER_API_KEY=your_openrouter_api_key
+SECRET_KEY=your_secret_key
+
+Replace `your_openrouter_api_key` with your own OpenRouter API key and replace `your_secret_key` with your own secret key.
+
+**Do not share or commit your `.env` file or your API key.**
+
+The project includes a `.gitignore` file which prevents the `.env` file from being committed to GitHub.
+
+
+## 6. Run the application
+
+Make sure you are in the project directory:
+
+ 
+cd C:\Users\uxana\Desktop\footyproject
+ 
+
+Make sure the virtual environment is activated:
+
+ 
+venv\Scripts\activate
+ 
+
+Then start the Flask application:
+
+ 
+python app.py
+ 
+
+---
+
+## 7. Open the application
+
+Once Flask has started successfully, open the following address in a web browser:
+
+http://127.0.0.1:5000/
+
+
+The application should now be running locally.
+
+---
+
+## 8. Stop the application
+
+To stop the Flask development server, return to the Command Prompt or PowerShell window and press:
+
+CTRL + C
+
+---
+
+## Important security information
+
+The `.env` file contains sensitive information, including the OpenRouter API key and Flask secret key.
+
+Do not upload or share your real API key publicly.
+
+The project includes a `.gitignore` file so that sensitive files such as `.env` and the `venv` directory are excluded from Git version control.

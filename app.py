@@ -167,10 +167,10 @@ Keep your answers friendly, clear, encouraging and accessible. Your audience may
     messages = data.get('messages', [])
 
     body = json.dumps({
-        "models": ["nvidia/nemotron-3.5-lightning:free", "thinkingmachines/inkling-small:free"],        
-        "messages": [
-            {"role": "system", "content": FOOTY_SYSTEM_PROMPT}
-        ] + messages
+    "models": ["nex-agi/nex-n2.5-mini:free"],
+    "messages": [
+        {"role": "system", "content": FOOTY_SYSTEM_PROMPT}
+    ] + messages
     }).encode()
 
     req = urllib.request.Request(

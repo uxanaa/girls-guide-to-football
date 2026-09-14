@@ -34,7 +34,7 @@
       <span data-tab-value="#tab_7">🏆 Leaderboard</span>
       <span data-tab-value="#tab_10">💬 Community Chat</span>
       <span data-tab-value="#tab_8" id="dashboardTab" style="display:none;">📊 My Stats</span>
-      <span class="tab-login" id="loginBtn" onclick="document.getElementById('loginModal').style.display='flex'">&#128100; Login</span>
+      <span class="tab-login" id="loginBtn" onclick="document.getElementById('loginModal').style.display='flex'">&#128100; Login / Sign Up</span>
       <span class="tab-login" id="logoutBtn" style="display:none;" onclick="submitLogout()">&#128100; <span id="navUsername"></span> | Logout</span>
     </div>
 
@@ -276,62 +276,80 @@
             <rect x="550" y="120" width="90" height="180" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
             <rect x="600" y="165" width="40" height="90" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>
 
+            
             <g id="scene-offside">
               <line x1="500" y1="40" x2="500" y2="380" stroke="#FF4444" stroke-width="2" stroke-dasharray="6 4"/>
               <text x="504" y="58" fill="#FF4444" font-size="11" font-family="sans-serif" font-weight="600">Last defender</text>
+
               <circle cx="540" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
               <text x="540" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">A</text>
               <text x="540" y="230" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Attacker</text>
               <text x="540" y="175" text-anchor="middle" fill="#FF4444" font-size="18" font-family="sans-serif">✕</text>
               <text x="540" y="162" text-anchor="middle" fill="#FF4444" font-size="10" font-family="sans-serif" font-weight="700">OFFSIDE</text>
-              <circle cx="70" cy="210" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
-              <text x="70" y="215" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+
+              <!-- Goalkeeper moved to the defending team's goal -->
+              <circle cx="620" cy="210" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="620" y="215" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+
               <circle cx="500" cy="240" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
               <text x="500" y="245" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">D</text>
+
               <circle cx="360" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
               <text x="360" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">P</text>
+
               <circle cx="383" cy="200" r="8" fill="#fff" stroke="#333" stroke-width="1.5"/>
               <line x1="391" y1="200" x2="520" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
               <rect x="80" y="395" width="520" height="36" rx="6" fill="#FF444422"/>
               <text x="340" y="410" text-anchor="middle" fill="#FF4444" font-size="12" font-family="sans-serif" font-weight="600">⚠ Offside: attacker (A) is beyond the last defender (D) when the ball is passed</text>
               <text x="340" y="425" text-anchor="middle" fill="#FF4444" font-size="11" font-family="sans-serif">Free kick awarded to the defending team</text>
             </g>
 
+
             <g id="scene-onside" display="none">
               <line x1="500" y1="40" x2="500" y2="380" stroke="#44BB44" stroke-width="2" stroke-dasharray="6 4"/>
               <text x="504" y="58" fill="#44BB44" font-size="11" font-family="sans-serif" font-weight="600">Last defender</text>
+
               <circle cx="460" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
               <text x="460" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">A</text>
               <text x="460" y="230" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Attacker</text>
               <text x="460" y="175" text-anchor="middle" fill="#44BB44" font-size="18" font-family="sans-serif">✓</text>
               <text x="460" y="162" text-anchor="middle" fill="#44BB44" font-size="10" font-family="sans-serif" font-weight="700">ONSIDE</text>
-              <circle cx="70" cy="210" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
-              <text x="70" y="215" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+
+              <!-- Goalkeeper moved to the defending team's goal -->
+              <circle cx="620" cy="210" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="620" y="215" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+
               <circle cx="500" cy="240" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
               <text x="500" y="245" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">D</text>
+
               <circle cx="360" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
               <text x="360" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">P</text>
+
               <circle cx="383" cy="200" r="8" fill="#fff" stroke="#333" stroke-width="1.5"/>
               <line x1="391" y1="200" x2="440" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
               <rect x="80" y="395" width="520" height="36" rx="6" fill="#44BB4422"/>
               <text x="340" y="410" text-anchor="middle" fill="#44BB44" font-size="12" font-family="sans-serif" font-weight="600">✓ Onside: attacker (A) is level with or behind the last defender (D)</text>
               <text x="340" y="425" text-anchor="middle" fill="#44BB44" font-size="11" font-family="sans-serif">Play continues — the pass is legal</text>
             </g>
 
+
+
             <g id="scene-gk" display="none">
-              <line x1="100" y1="40" x2="100" y2="380" stroke="#FF4444" stroke-width="2" stroke-dasharray="6 4"/>
-              <text x="104" y="58" fill="#FF4444" font-size="11" font-family="sans-serif" font-weight="600">Goalkeeper (last defender)</text>
-              <circle cx="70" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
-              <text x="70" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">A</text>
-              <text x="70" y="230" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Attacker</text>
-              <text x="70" y="175" text-anchor="middle" fill="#FF4444" font-size="18" font-family="sans-serif">✕</text>
-              <text x="70" y="162" text-anchor="middle" fill="#FF4444" font-size="10" font-family="sans-serif" font-weight="700">OFFSIDE</text>
-              <circle cx="100" cy="290" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
-              <text x="100" y="295" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
+              <line x1="580" y1="40" x2="580" y2="380" stroke="#FF4444" stroke-width="2" stroke-dasharray="6 4"/>
+              <text x="584" y="58" fill="#FF4444" font-size="11" font-family="sans-serif" font-weight="600">Goalkeeper (last defender)</text>
+              <circle cx="540" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
+              <text x="540" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">A</text>
+              <text x="540" y="230" text-anchor="middle" fill="#FFD700" font-size="11" font-family="sans-serif">Attacker</text>
+              <text x="540" y="175" text-anchor="middle" fill="#FF4444" font-size="18" font-family="sans-serif">✕</text>
+              <text x="540" y="162" text-anchor="middle" fill="#FF4444" font-size="10" font-family="sans-serif" font-weight="700">OFFSIDE</text>
+              <circle cx="620" cy="290" r="16" fill="#4488FF" stroke="#fff" stroke-width="2"/>
+              <text x="620" y="295" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif" font-weight="700">GK</text>
               <circle cx="360" cy="200" r="16" fill="#FFD700" stroke="#fff" stroke-width="2"/>
               <text x="360" y="205" text-anchor="middle" fill="#111" font-size="11" font-family="sans-serif" font-weight="700">P</text>
               <circle cx="383" cy="200" r="8" fill="#fff" stroke="#333" stroke-width="1.5"/>
-              <line x1="300" y1="200" x2="92" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+              <line x1="391" y1="200" x2="528" y2="200" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
               <rect x="80" y="395" width="520" height="36" rx="6" fill="#FF444422"/>
               <text x="340" y="410" text-anchor="middle" fill="#FF4444" font-size="12" font-family="sans-serif" font-weight="600">⚠ The goalkeeper counts as the last defender</text>
               <text x="340" y="425" text-anchor="middle" fill="#FF4444" font-size="11" font-family="sans-serif">The attacker must be behind at least one outfield player, or level with the GK</text>

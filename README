@@ -62,9 +62,9 @@ pip install -r requirements.txt
 
 ## 5. Set up the environment variables
 
-An `envexample` file is included in the project as a template for the required environment variables.
+An `.env.example` file is included in the project as a template for the required environment variables.
 
-Make a copy of `envexample` and rename the copy to:
+Make a copy of `.env.example` and rename the copy to:
 
 .env
 
@@ -78,6 +78,7 @@ Replace `your_openrouter_api_key` with your own OpenRouter API key and replace `
 **Do not share or commit your `.env` file or your API key.**
 
 The project includes a `.gitignore` file which prevents the `.env` file from being committed to GitHub.
+
 
 
 ## 6. Run the application

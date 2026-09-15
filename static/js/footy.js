@@ -7,7 +7,7 @@
 
 
 
-// ── 1. CONVERSATION HISTORY ───────────────────────────────────────
+// ── CONVERSATION HISTORY ───────────────────────────────────────
 // We store the full conversation so Footy remembers earlier messages.
 // Each message is an object with a role ("user" or "assistant")
 // and the content (what was said).
@@ -16,7 +16,7 @@
 let footyHistory = [];
 
 
-// ── 2. SEND MESSAGE ───────────────────────────────────────────────
+// ── SEND MESSAGE ───────────────────────────────────────────────
 // This runs when the user clicks Send or presses Enter.
 // It:
 //   a) reads what the user typed
@@ -83,7 +83,7 @@ async function sendFootyMessage() {
 }
 
 
-// ── 3. DISPLAY A MESSAGE ──────────────────────────────────────────
+// ── DISPLAY A MESSAGE ──────────────────────────────────────────
 // This adds a message bubble to the chat window.
 // sender is either 'user' (pink, right side) or 'bot' (light pink, left side)
 
@@ -106,7 +106,7 @@ function appendFootyMessage(text, sender) {
 }
 
 
-// ── 4. TYPING ANIMATION ───────────────────────────────────────────
+// ── TYPING ANIMATION ───────────────────────────────────────────
 // Shows three bouncing dots while waiting for Footy's reply.
 // Returns an id so we can remove it once the reply arrives.
 
@@ -130,7 +130,7 @@ function removeFootyTyping(id) {
 }
 
 
-// ── 5. SECURITY: ESCAPE HTML ──────────────────────────────────────
+// ── SECURITY - ESCAPE HTML ──────────────────────────────────────
 // This prevents XSS (cross-site scripting) attacks.
 // If the AI or a user types something like <script>alert('hack')</script>
 // this function converts the < and > into harmless text so it

@@ -11,7 +11,7 @@ function getCsrfToken() {
   var isRefresh = sessionStorage.getItem('visited');
   
   if (isRefresh) {
-    // Page was refreshed — restore the saved tab
+    // Page was refreshed, restore the saved tab
     var savedTab = sessionStorage.getItem('activeTab');
     if (savedTab && savedTab !== '#tab_1') {
       var allTabs = document.querySelectorAll('[data-tab-info]');
@@ -56,7 +56,7 @@ tabs.forEach(tab => {
 });
 
 
-    // Example player positions
+// ── POSITIONS DIAGRAM ─────────────────────────────────────────────────
     const players = [
     { name: "Player 1", position: "Goalkeeper", x: 574, y: 160, info: "Role: Protect the goal and prevent the opposing team from scoring." },
     { name: "Player 2", position: "Right Back", x: 435, y: 30, info: "Role: Defend the right side and support attacks down the wing." },
@@ -103,9 +103,9 @@ window.addEventListener('click', function (e) {
         infoPopup.style.display = 'none';
     }
 
-   });
+  });
 
-// Quiz data (same as before)
+// ── QUIZ DATA ─────────────────────────────────────────────────
 const quizData = [
     {
     question: "What is the primary role of a goalkeeper in football?",
@@ -251,7 +251,7 @@ function loadQuiz() {
       )
       .join("")}
   `;
- 
+
   // Display number of questions left
   remainingQuestionsContainer.innerHTML = `Questions Left: ${quizQuestions.length - currentQuiz}`;
 
@@ -390,7 +390,7 @@ function restartQuiz() {
   loadQuiz();
 }
 
-// Initialize Quiz
+// Initialise Quiz
 loadQuiz();
 
 
@@ -433,15 +433,7 @@ function escapeQuizHtml(text) {
 }
 
 
-/* ============================================================
-   WOMEN'S FOOTBALL
-   ============================================================ */
-
-
-/* ------------------------------------------------------------
-   WOMEN'S FOOTBALL DATA
-   ------------------------------------------------------------ */
-
+// ── WOMEN'S FOOTBALL DATA ─────────────────────────────────────────────────
 const womensFootballCountries = [
 
   {
@@ -579,9 +571,7 @@ const womensFootballCountries = [
 ];
 
 
-/* ------------------------------------------------------------
-   RECORD DATA
-   ------------------------------------------------------------ */
+// RECORD DATA
 
 const womensFootballRecords = [
 
@@ -668,9 +658,7 @@ const womensFootballRecords = [
 ];
 
 
-/* ------------------------------------------------------------
-  PLAYER AND TEAM DATA
-   ------------------------------------------------------------ */
+// PLAYER AND TEAM DATA
 
 const womensFootballProfiles = [
 
@@ -911,9 +899,7 @@ const womensFootballProfiles = [
 ];
 
 
-/* ============================================================
-   WOMEN'S SECTION NAVIGATION
-   ============================================================ */
+// WOMEN'S SECTION NAVIGATION
 
 function showWomenSection(sectionId, button) {
 
@@ -942,7 +928,7 @@ function showWomenSection(sectionId, button) {
 }
 
 
-/* COUNTRY CARDS */
+// COUNTRY CARDS
 
 function renderCountries(countryList) {
 
@@ -1030,9 +1016,7 @@ function filterCountries(continent, button) {
 }
 
 
-/* ============================================================
-  RECORD CARDS
-   ============================================================ */
+// RECORD CARDS
 
 function renderRecords(recordList) {
 
@@ -1123,9 +1107,7 @@ function filterRecords(category, button) {
 }
 
 
-/* ============================================================
-   PLAYER / TEAM CARDS
-   ============================================================ */
+// PLAYER / TEAM CARDS
 
 let currentProfileFilter = 'all';
 
@@ -1347,9 +1329,7 @@ function searchProfiles() {
 }
 
 
-/* ============================================================
-   PLAYER / TEAM POPUP
-   ============================================================ */
+// PLAYER / TEAM POPUP
 
 function openWomenProfile(index) {
 
@@ -1447,7 +1427,7 @@ function closeWomenProfile() {
 }
 
 
-/* Close modal when clicking outside */
+// Close modal when clicking outside
 
 window.addEventListener('click', function(event) {
 
@@ -1461,7 +1441,7 @@ window.addEventListener('click', function(event) {
 });
 
 
-/* Close modal with Escape */
+// Close modal with Escape
 
 window.addEventListener('keydown', function(event) {
 
@@ -1472,9 +1452,7 @@ window.addEventListener('keydown', function(event) {
 });
 
 
-/* ============================================================
-   SECURITY / HTML ESCAPING
-   ============================================================ */
+// SECURITY / HTML ESCAPING
 
 function escapeWomenHtml(text) {
 
@@ -1488,9 +1466,7 @@ function escapeWomenHtml(text) {
 }
 
 
-/* ============================================================
-   INITIALISE WOMEN'S FOOTBALL
-   ============================================================ */
+// INITIALISE WOMEN'S FOOTBALL
 
 function initialiseWomensFootball() {
 

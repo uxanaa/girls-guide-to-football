@@ -261,8 +261,8 @@ function loadLeaderboard() {
 // request carries the CSRF token (same as login/register).
 
 // Escape user text so a message like "<script>" is shown as plain
-// text, never executed. This is output escaping — the primary XSS
-// defence — applied at the moment of display.
+// text, never executed. This is output escaping, the primary XSS
+// defence, applied at the moment of display.
 function escapeChat(text) {
   return String(text)
     .replace(/&/g, '&amp;')
@@ -298,7 +298,7 @@ function loadChat() {
     .catch(() => {});
 }
 
-// Send a message. Requires login; carries the CSRF token.
+// Send a message. Requires login, carries the CSRF token.
 function sendChatMessage() {
   const input = document.getElementById('chatInput');
   if (!input) return;

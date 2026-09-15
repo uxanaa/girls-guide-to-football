@@ -8,8 +8,8 @@
 # one place and the route handlers in app.py stay thin (they just call
 # these methods and return JSON).
 #
-# NOTE ON BCRYPT (important — read before wiring into app.py):
-# We create an *unbound* Bcrypt() instance here. If models.py imported
+# NOTE ON BCRYPT:
+# Created an *unbound* Bcrypt() instance here. If models.py imported
 # bcrypt from app.py while app.py imported these classes from models.py,
 # Python would crash with a circular import. Instead, bcrypt is created
 # in this file and "bound" to the app later, from app.py, with:
